@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $appUrl = config('app.url');
+
+        // Force generated links to stay on HTTPS when app URL is tunneled via SSL.
+        if (is_string($appUrl) && str_starts_with($appUrl, 'https://')) {
+            URL::forceScheme('https');
+            URL::forceRootUrl($appUrl);
+        }
     }
 }

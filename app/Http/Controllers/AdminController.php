@@ -275,13 +275,13 @@ class AdminController extends Controller
         $fileName = 'laporan-servis-' . date('Y-m-d') . '.csv';
         $histories = ServiceHistory::with('vehicle.user')->latest()->get();
 
-        $headers = array(
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        );
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'X-Content-Type-Options' => 'nosniff',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ];
 
         $columns = array('Tanggal', 'Plat Nomor', 'Pemilik', 'Kendaraan', 'Jenis Servis', 'Spareparts', 'Total Biaya', 'Status', 'Pembayaran');
 
@@ -316,6 +316,6 @@ class AdminController extends Controller
             fclose($file);
         };
 
-        return response()->stream($callback, 200, $headers);
+        return response()->streamDownload($callback, $fileName, $headers);
     }
 }

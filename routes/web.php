@@ -7,6 +7,14 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::get('/about', [PublicController::class, 'about'])->name('about');
+Route::get('/services', [PublicController::class, 'services'])->name('services');
+Route::get('/services/diesel', [PublicController::class, 'dieselService'])->name('services.diesel');
+Route::get('/services/gasoline', [PublicController::class, 'gasolineService'])->name('services.gasoline');
+Route::get('/services/bubut', [PublicController::class, 'bubutService'])->name('services.bubut');
+Route::get('/services/bodyrepair', [PublicController::class, 'bodyRepairService'])->name('services.bodyrepair');
+Route::get('/gallery', [PublicController::class, 'gallery'])->name('gallery');
+Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::get('/track', [PublicController::class, 'track'])->name('track');
 Route::get('/track/invoice/{history}', [PublicController::class, 'downloadInvoice'])->name('public.download-invoice');
 

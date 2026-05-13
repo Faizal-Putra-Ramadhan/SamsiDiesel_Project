@@ -21,6 +21,46 @@ class PublicController extends Controller
         return view('welcome', compact('products'));
     }
 
+    public function about()
+    {
+        return view('customer.about');
+    }
+
+    public function services()
+    {
+        return view('customer.services');
+    }
+
+    public function dieselService()
+    {
+        return view('customer.services_diesel');
+    }
+
+    public function gasolineService()
+    {
+        return view('customer.services_gasoline');
+    }
+
+    public function bubutService()
+    {
+        return view('customer.bubut_las');
+    }
+
+    public function bodyRepairService()
+    {
+        return view('customer.body_repair');
+    }
+
+    public function gallery()
+    {
+        return view('customer.gallery');
+    }
+
+    public function contact()
+    {
+        return view('customer.contact');
+    }
+
     public function track(Request $request)
     {
         $user = null;

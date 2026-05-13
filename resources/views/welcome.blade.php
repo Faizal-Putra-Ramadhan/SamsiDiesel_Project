@@ -1,174 +1,395 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Autosamsi - Solusi Perawatan Kendaraan Anda</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        body { font-family: 'Outfit', sans-serif; }
-    </style>
-</head>
-<body class="bg-gray-950 text-gray-200 antialiased">
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center">
-                    <span class="text-2xl font-bold text-red-600 tracking-tighter uppercase">Auto<span class="text-white">samsi</span></span>
+@extends('layouts.frontend')
+
+@section('title', 'AutoSamsi')
+
+@section('content')
+    <!-- Carousel Start -->
+    <div class="container-fluid p-0 mb-5">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" src="{{ asset('template/img/bg-1.jpg') }}" alt="Image">
+                    <div class="carousel-caption d-flex align-items-center">
+                        <div class="container">
+                            <div class="row align-items-center justify-content-center justify-content-lg-start">
+                                <div class="col-10 col-lg-7 text-center text-lg-start">
+                                    <h6 class="text-white text-uppercase mb-3 animated slideInDown">// Engine Diesel //</h6>
+                                    <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Service Engine Diesel & Spareparts</h1>
+                                    <a href="{{ route('services.diesel') }}" class="btn btn-secondary py-3 px-5 animated slideInDown">Learn More<i class="fa fa-arrow-right ms-3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#home" class="hover:text-red-500 transition">Beranda</a>
-                    <a href="#services" class="hover:text-red-500 transition">Layanan</a>
-                    <a href="#products" class="hover:text-red-500 transition">Sparepart</a>
+                <div class="carousel-item">
+                    <img class="w-100" src="{{ asset('template/img/bg-2.jpg') }}" alt="Image">
+                    <div class="carousel-caption d-flex align-items-center">
+                        <div class="container">
+                            <div class="row align-items-center justify-content-center justify-content-lg-start">
+                                <div class="col-10 col-lg-7 text-center text-lg-start">
+                                    <h6 class="text-white text-uppercase mb-3 animated slideInDown">// Engine Gassoline //</h6>
+                                    <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Service Engine Gassoline & Spareparts</h1>
+                                    <a href="{{ route('services.gasoline') }}" class="btn btn-secondary py-3 px-5 animated slideInDown">Learn More<i class="fa fa-arrow-right ms-3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex space-x-4">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition">Dashboard</a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="px-4 py-2 border border-gray-700 hover:bg-gray-800 rounded-lg transition">Logout</button>
+                <div class="carousel-item">
+                    <img class="w-100" src="{{ asset('template/img/bg-3.jpg') }}" alt="Image">
+                    <div class="carousel-caption d-flex align-items-center">
+                        <div class="container">
+                            <div class="row align-items-center justify-content-center justify-content-lg-start">
+                                <div class="col-10 col-lg-7 text-center text-lg-start">
+                                    <h6 class="text-white text-uppercase mb-3 animated slideInDown">// Bubut //</h6>
+                                    <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Bubut, Las, dan Pembuatan Alat Pendukung Pabrik</h1>
+                                    <a href="{{ route('services.bubut') }}" class="btn btn-secondary py-3 px-5 animated slideInDown">Learn More<i class="fa fa-arrow-right ms-3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="w-100" src="{{ asset('template/img/bg-4.jpg') }}" alt="Image">
+                    <div class="carousel-caption d-flex align-items-center">
+                        <div class="container">
+                            <div class="row align-items-center justify-content-center justify-content-lg-start">
+                                <div class="col-10 col-lg-7 text-center text-lg-start">
+                                    <h6 class="text-white text-uppercase mb-3 animated slideInDown">// Body Repaire //</h6>
+                                    <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Body Repaire & Repaint (Perbaikan Body & Pengecatan)</h1>
+                                    <a href="{{ route('services.bodyrepair') }}" class="btn btn-secondary py-3 px-5 animated slideInDown">Learn More<i class="fa fa-arrow-right ms-3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+    <!-- Lacak Section Start (Injected for functionality) -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-10 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="bg-light p-5 rounded">
+                        <div class="text-center mb-4">
+                            <h6 class="text-primary text-uppercase">// Lacak Progres //</h6>
+                            <h1 class="mb-0">Cek Status Kendaraan Anda</h1>
+                        </div>
+                        <form action="{{ route('track') }}" method="GET">
+                            <div class="row g-3">
+                                <div class="col-md-9">
+                                    <input type="text" name="whatsapp_number" class="form-control border-0 py-3" placeholder="Masukkan Nomor WhatsApp Pelanggan..." required>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-secondary w-100 py-3" type="submit">Cari Data</button>
+                                </div>
+                            </div>
                         </form>
-                    @endauth
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+    <!-- Lacak Section End -->
 
-    <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center pt-16">
-        <div class="absolute inset-0 z-0">
-            <img src="{{ asset('assets/img/autosamsi_workshop_hero_1775454712728.png') }}" class="w-full h-full object-cover opacity-30" alt="Workshop Hero">
-            <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent"></div>
-        </div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl">
-                <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6 tracking-tight">
-                    Perawatan Premium untuk <span class="text-red-600">Kendaraan Anda.</span>
-                </h1>
-                <p class="text-xl text-gray-400 mb-8 leading-relaxed">
-                    Bengket Autosamsi melayani dengan standar profesionalitas tinggi, peralatan modern, dan teknisi berpengalaman.
-                </p>
-                <div class="flex flex-wrap gap-4 mb-12">
-                    <a href="#products" class="px-8 py-4 bg-red-600 hover:bg-red-700 text-white text-lg font-bold rounded-xl transition shadow-lg shadow-red-600/20">Belanja Sekarang</a>
-                    <a href="https://shope.ee" target="_blank" class="px-8 py-4 bg-white hover:bg-gray-100 text-gray-900 text-lg font-bold rounded-xl transition">Kunjungi Shopee</a>
-                </div>
-
-                <!-- Tracking Section -->
-                <div class="bg-gray-900/40 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 max-w-xl shadow-2xl">
-                    <h3 class="text-sm font-black uppercase tracking-widest text-red-600 mb-4">Lacak Kendaraan Anda</h3>
-                    <form action="{{ route('track') }}" method="GET" class="flex flex-col sm:flex-row gap-4">
-                        <div class="relative flex-1">
-                            <input type="text" name="whatsapp_number" placeholder="Masukan No. WhatsApp Pelanggan..." class="w-full bg-gray-950 border border-gray-800 text-white px-6 py-4 rounded-2xl focus:ring-2 focus:ring-red-600 outline-none transition" required>
-                            <svg class="w-6 h-6 absolute right-4 top-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+    <!-- Service Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="d-flex py-5 px-4">
+                        <i class="fa fa-certificate fa-3x text-secondary flex-shrink-0"></i>
+                        <div class="ps-4">
+                            <h5 class="mb-3">Quality Servicing</h5>
+                            <p>Pelayanan kami tidak hanya sekadar memenuhi kebutuhan pelanggan, namun juga memberikan pengalaman yang luar biasa dengan standar kualitas yang tinggi dan profesional.</p>
                         </div>
-                        <button type="submit" class="px-8 py-4 bg-white text-gray-900 font-bold rounded-2xl hover:bg-gray-200 transition">
-                            Cari
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="d-flex bg-light py-5 px-4">
+                        <i class="fa fa-users-cog fa-3x text-secondary flex-shrink-0"></i>
+                        <div class="ps-4">
+                            <h5 class="mb-3">Expert Workers</h5>
+                            <p>Tim kami terdiri dari para ahli di bidangnya yang memiliki pengalaman dan keahlian yang mendalam, siap memberikan solusi terbaik untuk setiap tantangan yang dihadapi.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="d-flex py-5 px-4">
+                        <i class="fa fa-tools fa-3x text-secondary flex-shrink-0"></i>
+                        <div class="ps-4">
+                            <h5 class="mb-3">Modern Equipment</h5>
+                            <p>Kami menggunakan peralatan modern dan teknologi terbaru untuk memastikan hasil layanan yang berkualitas dan efisien.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+
+    <!-- About Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 pt-4" style="min-height: 400px;">
+                    <div class="position-relative h-100 wow fadeIn" data-wow-delay="0.1s">
+                        <img class="position-absolute img-fluid w-100 h-100" src="{{ asset('template/img/about.jpg') }}" style="object-fit: cover;" alt="">
+                        <div class="position-absolute top-0 end-0 mt-n4 me-n4 py-4 px-5" style="background: rgba(0, 0, 0, .08);">
+                            <h1 class="display-4 text-white mb-0">61 <span class="fs-4">Years</span></h1>
+                            <h4 class="text-white">Experience</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h6 class="text-secondary text-uppercase">// About Us //</h6>
+                    <h1 class="mb-4"><span class="text-secondary" style="font-style: italic;"><span style="color: red;">Auto</span>Samsi</span></h1>
+                    <p class="mb-4">UD.Samsi Motor Group (Bengkel Samsi) adalah perusahaan yang bergerak dalam bidang jasa meliputi :</p>
+                    <div class="row g-4 mb-3 pb-3">
+                        <div class="col-12 wow fadeIn" data-wow-delay="0.1s">
+                            <div class="d-flex">
+                                <div class="bg-light d-flex flex-shrink-0 align-items-center justify-content-center mt-1" style="width: 45px; height: 45px;">
+                                    <span class="fw-bold text-secondary">01</span>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>Service</h6>
+                                    <span>Perawatan dan perbaikan kendaaan bermesin Gasolline (Bensin) dan Diesel (Biosolar).</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 wow fadeIn" data-wow-delay="0.3s">
+                            <div class="d-flex">
+                                <div class="bg-light d-flex flex-shrink-0 align-items-center justify-content-center mt-1" style="width: 45px; height: 45px;">
+                                    <span class="fw-bold text-secondary">02</span>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>Body Repaire</h6>
+                                    <span>Perbaikan body dan pengecatan ulang kendaraan.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 wow fadeIn" data-wow-delay="0.5s">
+                            <div class="d-flex">
+                                <div class="bg-light d-flex flex-shrink-0 align-items-center justify-content-center mt-1" style="width: 45px; height: 45px;">
+                                    <span class="fw-bold text-secondary">03</span>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>Spareparts</h6>
+                                    <span>Penjualan berbagai macam sparepart kendaraan.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 wow fadeIn" data-wow-delay="0.7s">
+                            <div class="d-flex">
+                                <div class="bg-light d-flex flex-shrink-0 align-items-center justify-content-center mt-1" style="width: 45px; height: 45px;">
+                                    <span class="fw-bold text-secondary">04</span>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>Bubut & Las</h6>
+                                    <span>Segala pekerjaan bubut dan las, serta pembuatan alat pendukung pabrik</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+    <!-- Fact Start -->
+    <div class="container-fluid fact bg-dark my-5 py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.1s">
+                    <i class="fa fa-check fa-2x text-white mb-3"></i>
+                    <h2 class="text-white mb-2" data-toggle="counter-up">61</h2>
+                    <p class="text-white mb-0">Years Experience</p>
+                </div>
+                <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.3s">
+                    <i class="fa fa-users-cog fa-2x text-white mb-3"></i>
+                    <h2 class="text-white mb-2" data-toggle="counter-up">40</h2>
+                    <p class="text-white mb-0">Expert Technicians</p>
+                </div>
+                <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.5s">
+                    <i class="fa fa-users fa-2x text-white mb-3"></i>
+                    <h2 class="text-white mb-2" data-toggle="counter-up">150</h2>
+                    <p class="text-white mb-0">Satisfied Clients</p>
+                </div>
+                <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.7s">
+                    <i class="fa fa-car fa-2x text-white mb-3"></i>
+                    <h2 class="text-white mb-2" data-toggle="counter-up">1000</h2>
+                    <p class="text-white mb-0">Compleate Projects</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fact End -->
+
+    <!-- our services Start -->
+    <div class="container-xxl service py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="text-secondary text-uppercase">// Our Services //</h6>
+                <h1 class="mb-5">Explore Our Services</h1>
+            </div>
+            <div class="row g-4 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="col-lg-4">
+                    <div class="nav w-100 nav-pills me-4">
+                        <button class="nav-link w-100 d-flex align-items-center text-start p-4 mb-4 active" data-bs-toggle="pill" data-bs-target="#tab-pane-1" type="button">
+                            <h4 class="m-0">Service Engine Diesel & Spareparts.</h4>
                         </button>
-                    </form>
-                    <p class="mt-4 text-xs text-gray-500">Masukan nomor WhatsApp yang digunakan saat pendaftaran servis.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section class="py-24 bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="relative group overflow-hidden rounded-2xl">
-                    <img src="{{ asset('assets/img/autosamsi_gallery_1_1775454753441.png') }}" class="w-full h-[400px] object-cover transition duration-700 group-hover:scale-110" alt="Gallery 1">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 to-transparent flex items-end p-8">
-                        <p class="text-xl font-semibold">Ruang Tunggu Eksklusif</p>
+                        <button class="nav-link w-100 d-flex align-items-center text-start p-4 mb-4" data-bs-toggle="pill" data-bs-target="#tab-pane-2" type="button">
+                            <h4 class="m-0">Service Engine Gassoline & Spareparts</h4>
+                        </button>
+                        <button class="nav-link w-100 d-flex align-items-center text-start p-4 mb-4" data-bs-toggle="pill" data-bs-target="#tab-pane-3" type="button">
+                            <h4 class="m-0">Pengelasan, Bubut & Pembuatan Alat Pendukung Pabrik</h4>
+                        </button>
+                        <button class="nav-link w-100 d-flex align-items-center text-start p-4 mb-0" data-bs-toggle="pill" data-bs-target="#tab-pane-4" type="button">
+                            <h4 class="m-0">Body Repaire & Repaint (Perbaikan Body & Pengecatan)</h4>
+                        </button>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl">
-                     <img src="{{ asset('assets/img/autosamsi_workshop_hero_1775454712728.png') }}" class="w-full h-[400px] object-cover transition duration-700 group-hover:scale-110" alt="Gallery 2">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 to-transparent flex items-end p-8">
-                        <p class="text-xl font-semibold">Peralatan Diagnostik Modern</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="py-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4 uppercase tracking-wider text-red-600">Layanan Kami</h2>
-                <p class="text-gray-400">Kami memberikan kenyamanan dan keamanan terbaik untuk perjalanan Anda.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-gray-900/50 p-10 rounded-3xl border border-gray-800 hover:border-red-500/50 transition">
-                    <div class="w-16 h-16 bg-red-600/10 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4">Ganti Oli</h3>
-                    <p class="text-gray-400">Pilihan oli terbaik untuk menjaga performa mesin tetap optimal dan tahan lama.</p>
-                </div>
-                <div class="bg-gray-900/50 p-10 rounded-3xl border border-gray-800 hover:border-red-500/50 transition">
-                    <div class="w-16 h-16 bg-red-600/10 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4">Servis Rutin</h3>
-                    <p class="text-gray-400">Pengecekan menyeluruh untuk memastikan kendaraan Anda selalu dalam kondisi prima.</p>
-                </div>
-                <div class="bg-gray-900/50 p-10 rounded-3xl border border-gray-800 hover:border-red-500/50 transition">
-                    <div class="w-16 h-16 bg-red-600/10 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4">Suku Cadang</h3>
-                    <p class="text-gray-400">Ketersediaan sparepart lengkap dan berkualitas tinggi untuk berbagai merk kendaraan.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Products Section -->
-    <section id="products" class="py-24 bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-                <div>
-                    <h2 class="text-4xl font-bold uppercase tracking-wider text-red-600 mb-4">Spareparts & Produk</h2>
-                    <p class="text-gray-400 max-w-xl">Cari suku cadang kebutuhan kendaraan Anda. Bisa langsung beli di Shopee kami.</p>
-                </div>
-                <form action="{{ route('home') }}#products" method="GET" class="w-full md:w-auto">
-                    <div class="relative">
-                        <input type="text" name="search" placeholder="Cari sparepart..." value="{{ request('search') }}" class="bg-gray-800 border border-gray-700 text-white px-6 py-3 pl-12 rounded-2xl w-full md:w-80 focus:ring-2 focus:ring-red-600 outline-none">
-                        <svg class="w-6 h-6 absolute left-4 top-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    </div>
-                </form>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                @forelse($products as $product)
-                    <div class="bg-gray-950 border border-gray-800 rounded-3xl overflow-hidden group hover:border-red-600 transition duration-300">
-                        <div class="relative overflow-hidden aspect-square">
-                            <img src="{{ asset('assets/img/' . $product->image_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="{{ $product->name }}">
+                <div class="col-lg-8">
+                    <div class="tab-content w-100">
+                        <div class="tab-pane fade show active" id="tab-pane-1">
+                            <div class="row g-4">
+                                <div class="col-md-6" style="min-height: 350px;">
+                                    <div class="position-relative h-100">
+                                        <img class="position-absolute img-fluid w-100 h-100" src="{{ asset('template/img/services-1.jpg') }}" style="object-fit: cover;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="mb-3">Diesel Engine</h3>
+                                    <p class="mb-4">Samsi Diesel & Spareparts. Spesialis Kendaraan dan Alat Berat Bermesin Diesel. Mulai dari kendaraan konvensional sampai teknologi commonrail.</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Engine Tune up</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>suku cadang (spareparts)</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Ganti Oli</p>
+                                    <a href="{{ route('services.diesel') }}" class="btn btn-secondary py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold mb-4 line-clamp-1">{{ $product->name }}</h3>
-                            <a href="{{ $product->shopee_url }}" target="_blank" class="block w-full py-3 bg-white hover:bg-gray-100 text-gray-900 text-center font-bold rounded-xl transition">Beli di Shopee</a>
+                        <div class="tab-pane fade" id="tab-pane-2">
+                            <div class="row g-4">
+                                <div class="col-md-6" style="min-height: 350px;">
+                                    <div class="position-relative h-100">
+                                        <img class="position-absolute img-fluid w-100 h-100" src="{{ asset('template/img/services-2.jpg') }}" style="object-fit: cover;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="mb-3">Gassoline Engine</h3>
+                                    <p class="mb-4">Auto Samsi Gasoline & Spareparts. Spesialis Kendaraan Gasoline. Mulai dari konvensional sampai teknologi EFI.</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Engine Tune up</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Scanner ECU/ECM</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Over Houl</p>
+                                    <a href="{{ route('services.gasoline') }}" class="btn btn-secondary py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-pane-3">
+                            <div class="row g-4">
+                                <div class="col-md-6" style="min-height: 350px;">
+                                    <div class="position-relative h-100">
+                                        <img class="position-absolute img-fluid w-100 h-100" src="{{ asset('template/img/services-3.jpg') }}" style="object-fit: cover;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="mb-3">Bubut & Las</h3>
+                                    <p class="mb-4">Samsi Bubut dan Las. Berfokus pada perindustrian dan otomotif.</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Segala Pekerjaan Bubut dan Las.</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Colter / Ganti Boring</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Slep Cylinder Head</p>
+                                    <a href="{{ route('services.bubut') }}" class="btn btn-secondary py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-pane-4">
+                            <div class="row g-4">
+                                <div class="col-md-6" style="min-height: 350px;">
+                                    <div class="position-relative h-100">
+                                        <img class="position-absolute img-fluid w-100 h-100" src="{{ asset('template/img/services-4.jpg') }}" style="object-fit: cover;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="mb-3">Repaire Body</h3>
+                                    <p class="mb-4">Auto Samsi Body Repair & Repaint. Spesiali Body Repair (Kenteng body) dan Cat Ulang.</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Kenteng Body</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Ketok Magic</p>
+                                    <p><i class="fa fa-check me-3 text-success"></i>Canter Sasis Truck</p>
+                                    <a href="{{ route('services.bodyrepair') }}" class="btn btn-secondary py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- our services End -->
+
+    <!-- Booking Start -->
+    <div class="container-fluid bg-secondary booking my-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="row gx-5">
+                <div class="col-lg-6 py-5">
+                    <div class="py-5">
+                        <h1 class="text-white mb-4">History Of <span style="font-style: italic; color: red;">Auto</span><i style="font-style: italic;">Samsi</i> Group</h1>
+                        <p class="text-white mb-0">Bengkel Samsi berdiri sejak 1962 dengan usaha awal bengkel mobil panggilan dengan jumlah karyawan 6 orang yang berlokasi awal di Desa Menadi Kab. Pacitan. Pada tahun 2000an menambah bidang usaha menjadi beberapa divisi dengan jumlah karyawan kurang lebih 30 orang yang terdiri dari staff dan mekanik yang ahli dalam menangani segala jenis kendaraan, dan membuka cabang dikota pacitan.</p>
+                        <a href="{{ route('about') }}" class="btn btn-primary py-3 px-5 mt-3">Read More<i class="fa fa-arrow-right ms-3"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Booking End -->
+
+    <!-- Spareparts Section (Dynamic) -->
+    <div id="products" class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="text-secondary text-uppercase">// Spareparts & Produk //</h6>
+                <h1 class="mb-5">Belanja Suku Cadang</h1>
+            </div>
+            <div class="row g-4 mb-4">
+                <div class="col-lg-12">
+                    <form action="{{ route('home') }}#products" method="GET" class="d-flex gap-2">
+                        <input type="text" name="search" placeholder="Cari sparepart..." value="{{ request('search') }}" class="form-control">
+                        <button type="submit" class="btn btn-secondary px-5">Cari</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row g-4">
+                @forelse($products as $product)
+                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="team-item">
+                            <div class="position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="{{ asset('assets/img/' . $product->image_path) }}" alt="{{ $product->name }}">
+                                <div class="team-overlay position-absolute start-0 top-0 w-100 h-100">
+                                    <a class="btn btn-square mx-1" href="{{ $product->shopee_url }}" target="_blank"><i class="fa fa-shopping-cart"></i></a>
+                                </div>
+                            </div>
+                            <div class="bg-light text-center p-4">
+                                <h5 class="fw-bold mb-0 text-truncate" title="{{ $product->name }}">{{ $product->name }}</h5>
+                                <a href="{{ $product->shopee_url }}" target="_blank" class="btn btn-sm btn-secondary mt-3">Beli di Shopee</a>
+                            </div>
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-full py-12 text-center text-gray-500">
-                        Tidak ada produk yang ditemukan.
-                    </div>
+                    <div class="col-12 text-center text-muted">Produk tidak ditemukan.</div>
                 @endforelse
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-12 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500">
-            <p>&copy; 2026 Autosamsi. Developed by Antigravity AI.</p>
-        </div>
-    </footer>
-</body>
-</html>
+    </div>
+    <!-- Spareparts End -->
+@endsection
