@@ -49,12 +49,20 @@
                         @foreach($products as $product)
                             <div class="bg-gray-100 dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
                                 <div class="aspect-square bg-gray-200 dark:bg-gray-800">
-                                    <img src="{{ Str::startsWith($product->image_path, 'http') ? $product->image_path : ($product->image_path && Str::contains($product->image_path, '.') ? asset('assets/img/' . $product->image_path) : asset('storage/' . $product->image_path)) }}" class="w-full h-full object-cover">
+                                    <img src="{{ $product->image_url }}" class="w-full h-full object-cover" alt="{{ $product->name }}">
                                 </div>
                                 <div class="p-4">
                                     <h4 class="font-bold text-sm mb-2 line-clamp-1 uppercase">{{ $product->name }}</h4>
-                                    <a href="{{ $product->shopee_url }}" target="_blank" class="text-blue-500 text-xs truncate block mb-4">Shopee &rarr;</a>
-                                    <button class="w-full py-2 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg text-xs font-bold hover:bg-red-600 hover:text-white transition">Hapus</button>
+                                    @if($product->shopee_url)
+                                        <a href="{{ $product->shopee_url }}" target="_blank" class="text-blue-500 text-xs truncate block mb-4">Shopee &rarr;</a>
+                                    @else
+                                        <span class="text-gray-400 text-xs block mb-4">Tidak ada link Shopee</span>
+                                    @endif
+                                    <form action="{{ route('admin.destroy-product', $product) }}" method="POST" onsubmit="return confirm('Hapus produk ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="w-full py-2 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg text-xs font-bold hover:bg-red-600 hover:text-white transition">Hapus</button>
+                                    </form>
                                 </div>
                             </div>
                         @endforeach

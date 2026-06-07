@@ -27,12 +27,16 @@
                     <div class="bg-light p-5 rounded shadow-sm border">
                         <div class="text-center mb-4">
                             <h6 class="text-primary text-uppercase">// Status Kendaraan //</h6>
-                            <h1 class="mb-4">Cek Progres Servis</h1>
+                            <h1 class="mb-2">Cek Progres Servis</h1>
+                            <p class="text-muted mb-4">Masukkan nomor WhatsApp dan plat nomor kendaraan.</p>
                         </div>
                         <form action="{{ route('track') }}" method="GET">
                             <div class="row g-3">
-                                <div class="col-md-9">
-                                    <input type="text" name="whatsapp_number" value="{{ request('whatsapp_number') }}" class="form-control border-0 py-3" placeholder="Masukkan Nomor WhatsApp Pelanggan..." required>
+                                <div class="col-md-5">
+                                    <input type="text" name="whatsapp_number" value="{{ old('whatsapp_number', request('whatsapp_number')) }}" class="form-control border-0 py-3" placeholder="Nomor WhatsApp, contoh 62812..." required>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="plate_number" value="{{ old('plate_number', request('plate_number')) }}" class="form-control border-0 py-3 text-uppercase" placeholder="Plat Nomor, contoh B 1234 ABC" required>
                                 </div>
                                 <div class="col-md-3">
                                     <button class="btn btn-primary w-100 py-3" type="submit">Cari Data</button>
@@ -106,6 +110,10 @@
                                                     </thead>
                                                     <tbody>
                                                         @forelse($vehicle->serviceHistories as $history)
+                                                            @php
+                                                                $serviceDetails = $history->details->where('type', 'jasa');
+                                                                $sparepartDetails = $history->details->where('type', 'sparepart');
+                                                            @endphp
                                                             <tr>
                                                                 <td class="px-4 py-4">
                                                                     <div class="fw-bold">{{ \Carbon\Carbon::parse($history->service_date)->format('d M Y') }}</div>
@@ -114,11 +122,14 @@
                                                                 <td class="px-4 py-4">
                                                                     <div class="fw-bold text-uppercase">{{ $history->service_type }}</div>
                                                                     <ul class="list-unstyled small text-muted mb-0 mt-2">
-                                                                        @foreach($history->details as $item)
-                                                                            <li><i class="fa fa-check text-primary me-2"></i>{{ $item->name }}</li>
+                                                                        @foreach($serviceDetails as $item)
+                                                                            <li><i class="fa fa-check text-primary me-2"></i>Jasa: {{ $item->name }} - Rp {{ number_format($item->price, 0, ',', '.') }}</li>
+                                                                        @endforeach
+                                                                        @foreach($sparepartDetails as $item)
+                                                                            <li><i class="fa fa-cog text-primary me-2"></i>Sparepart: {{ $item->name }} - Rp {{ number_format($item->price, 0, ',', '.') }}</li>
                                                                         @endforeach
                                                                     </ul>
-                                                                    @if($history->spareparts)
+                                                                    @if($sparepartDetails->isEmpty() && $history->spareparts)
                                                                         <div class="mt-2">
                                                                             <small class="text-muted italic">Spareparts: {{ $history->spareparts }}</small>
                                                                         </div>
@@ -132,7 +143,7 @@
                                                                     </span>
                                                                 </td>
                                                                 <td class="px-4 py-4 text-center">
-                                                                    <a href="{{ route('public.download-invoice', $history) }}" class="btn btn-outline-primary btn-sm rounded-pill">
+                                                                    <a href="{{ URL::signedRoute('public.download-invoice', $history) }}" class="btn btn-outline-primary btn-sm rounded-pill">
                                                                         <i class="fa fa-download me-2"></i>Unduh
                                                                     </a>
                                                                 </td>

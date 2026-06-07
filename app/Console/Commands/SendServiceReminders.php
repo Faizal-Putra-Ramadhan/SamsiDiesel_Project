@@ -57,18 +57,46 @@ class SendServiceReminders extends Command
             $response = \Illuminate\Support\Facades\Http::withHeaders([
                 'Authorization' => $token,
             ])->asForm()->post($apiUrl, [
-                'target' => $user->whatsapp_number,
+                'target' => $this->normalizeWhatsappNumber($user->whatsapp_number),
                 'message' => $message,
             ]);
 
             if ($response->successful() && data_get($response->json(), 'status') !== false) {
+                $this->logNotification($user, $vehicle, $message, 'sent');
                 $this->info("Sent reminder to {$user->name} ({$user->whatsapp_number})");
                 $count++;
             } else {
+                $this->logNotification($user, $vehicle, $message, 'failed');
                 $this->error("Failed to send reminder to {$user->name}: " . $response->body());
             }
         }
 
         $this->info("Completed sending {$count} reminders.");
+    }
+
+    private function normalizeWhatsappNumber(string $number): string
+    {
+        $number = preg_replace('/[^0-9]/', '', $number);
+
+        if (str_starts_with($number, '0')) {
+            return '62' . substr($number, 1);
+        }
+
+        if (str_starts_with($number, '8')) {
+            return '62' . $number;
+        }
+
+        return $number;
+    }
+
+    private function logNotification($user, $vehicle, string $message, string $status): void
+    {
+        \App\Models\NotificationLog::create([
+            'user_id' => $user->id,
+            'vehicle_id' => $vehicle->id,
+            'sent_at' => now(),
+            'message_content' => $message,
+            'status' => $status,
+        ]);
     }
 }

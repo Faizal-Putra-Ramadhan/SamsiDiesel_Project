@@ -139,30 +139,57 @@
         <table>
             <thead>
                 <tr>
-                    <th>Deskripsi Servis</th>
+                    <th>Deskripsi</th>
+                    <th>Kategori</th>
                     <th>Teknisi</th>
                     <th style="text-align: right;">Biaya</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($history->details as $item)
+                @php
+                    $serviceDetails = $history->details->where('type', 'jasa');
+                    $sparepartDetails = $history->details->where('type', 'sparepart');
+                @endphp
+
+                @foreach($serviceDetails as $item)
                 <tr>
                     <td>{{ $item->name }}</td>
+                    <td>Jasa</td>
                     <td>{{ $history->technician_name ?? '-' }}</td>
                     <td style="text-align: right;">Rp {{ number_format($item->price, 0, ',', '.') }}</td>
                 </tr>
                 @endforeach
-                
-                @if($history->spareparts)
+
+                @foreach($sparepartDetails as $item)
                 <tr>
-                    <td colspan="3" style="font-size: 12px; color: #666; background-color: #fafafa;">
+                    <td>{{ $item->name }}</td>
+                    <td>Sparepart</td>
+                    <td>-</td>
+                    <td style="text-align: right;">Rp {{ number_format($item->price, 0, ',', '.') }}</td>
+                </tr>
+                @endforeach
+
+                @if($serviceDetails->isNotEmpty() || $sparepartDetails->isNotEmpty())
+                <tr>
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Subtotal Jasa</td>
+                    <td style="text-align: right; font-weight: bold;">Rp {{ number_format($serviceDetails->sum('price'), 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Subtotal Sparepart</td>
+                    <td style="text-align: right; font-weight: bold;">Rp {{ number_format($sparepartDetails->sum('price'), 0, ',', '.') }}</td>
+                </tr>
+                @endif
+
+                @if($sparepartDetails->isEmpty() && $history->spareparts)
+                <tr>
+                    <td colspan="4" style="font-size: 12px; color: #666; background-color: #fafafa;">
                         <strong>Spareparts:</strong> {{ $history->spareparts }}
                     </td>
                 </tr>
                 @endif
                 @if($history->notes)
                 <tr>
-                    <td colspan="3" style="font-size: 11px; color: #888; border-bottom: none;">
+                    <td colspan="4" style="font-size: 11px; color: #888; border-bottom: none;">
                         <strong>Catatan:</strong> {{ $history->notes }}
                     </td>
                 </tr>

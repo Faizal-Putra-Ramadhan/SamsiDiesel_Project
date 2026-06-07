@@ -88,8 +88,11 @@
                         </div>
                         <form action="{{ route('track') }}" method="GET">
                             <div class="row g-3">
-                                <div class="col-md-9">
-                                    <input type="text" name="whatsapp_number" class="form-control border-0 py-3" placeholder="Masukkan Nomor WhatsApp Pelanggan..." required>
+                                <div class="col-md-5">
+                                    <input type="text" name="whatsapp_number" class="form-control border-0 py-3" placeholder="Nomor WhatsApp, contoh 62812..." required>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="plate_number" class="form-control border-0 py-3 text-uppercase" placeholder="Plat Nomor, contoh B 1234 ABC" required>
                                 </div>
                                 <div class="col-md-3">
                                     <button class="btn btn-secondary w-100 py-3" type="submit">Cari Data</button>
@@ -374,14 +377,18 @@
                     <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="team-item">
                             <div class="position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="{{ asset('assets/img/' . $product->image_path) }}" alt="{{ $product->name }}">
+                                <img class="img-fluid w-100" src="{{ $product->image_url }}" alt="{{ $product->name }}">
                                 <div class="team-overlay position-absolute start-0 top-0 w-100 h-100">
-                                    <a class="btn btn-square mx-1" href="{{ $product->shopee_url }}" target="_blank"><i class="fa fa-shopping-cart"></i></a>
+                                    @if($product->shopee_url)
+                                        <a class="btn btn-square mx-1" href="{{ $product->shopee_url }}" target="_blank"><i class="fa fa-shopping-cart"></i></a>
+                                    @endif
                                 </div>
                             </div>
                             <div class="bg-light text-center p-4">
                                 <h5 class="fw-bold mb-0 text-truncate" title="{{ $product->name }}">{{ $product->name }}</h5>
-                                <a href="{{ $product->shopee_url }}" target="_blank" class="btn btn-sm btn-secondary mt-3">Beli di Shopee</a>
+                                @if($product->shopee_url)
+                                    <a href="{{ $product->shopee_url }}" target="_blank" class="btn btn-sm btn-secondary mt-3">Beli di Shopee</a>
+                                @endif
                             </div>
                         </div>
                     </div>

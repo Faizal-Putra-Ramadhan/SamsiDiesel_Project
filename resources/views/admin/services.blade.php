@@ -23,6 +23,13 @@
                         </div>
                     @endif
 
+                    @if(Session::has('error'))
+                        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10A8 8 0 112 10a8 8 0 0116 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+                            {{ Session::get('error') }}
+                        </div>
+                    @endif
+
                     <form action="{{ route('admin.add-service') }}" method="POST" class="space-y-6">
                         @csrf
                         
@@ -48,41 +55,87 @@
                             </div>
                         </div>
 
-                        <div class="space-y-4 pt-4 border-t border-gray-100 dark:border-gray-700" x-data="{ 
-                            services: [{ name: '', price: 0 }],
-                            addService() { this.services.push({ name: '', price: 0 }) },
-                            removeService(index) { if(this.services.length > 1) this.services.splice(index, 1) },
-                            get total() { return this.services.reduce((acc, curr) => acc + (parseFloat(curr.price) || 0), 0) }
+                        <div class="space-y-6 pt-4 border-t border-gray-100 dark:border-gray-700" x-data="{ 
+                            serviceItems: [{ name: '', price: 0 }],
+                            sparepartItems: [{ name: '', price: 0 }],
+                            addService() { this.serviceItems.push({ name: '', price: 0 }) },
+                            removeService(index) { if(this.serviceItems.length > 1) this.serviceItems.splice(index, 1) },
+                            addSparepart() { this.sparepartItems.push({ name: '', price: 0 }) },
+                            removeSparepart(index) { if(this.sparepartItems.length > 1) this.sparepartItems.splice(index, 1) },
+                            sum(items) { return items.reduce((acc, curr) => acc + (parseFloat(curr.price) || 0), 0) },
+                            get serviceTotal() { return this.sum(this.serviceItems) },
+                            get sparepartTotal() { return this.sum(this.sparepartItems) },
+                            get total() { return this.serviceTotal + this.sparepartTotal }
                         }">
-                            <div class="flex justify-between items-center mb-4">
-                                <h4 class="text-sm font-black uppercase tracking-wider text-gray-400">Rincian Servis & Biaya</h4>
-                                <button type="button" @click="addService()" class="text-xs font-bold bg-gray-100 dark:bg-gray-700 hover:bg-red-600 hover:text-white text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg transition-all flex items-center">
-                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                                    Tambah Item
-                                </button>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="text-sm font-black uppercase tracking-wider text-gray-400">Biaya Jasa</h4>
+                                        <p class="text-xs text-gray-400 mt-1">Masukkan jenis pekerjaan servis dan biaya jasanya.</p>
+                                    </div>
+                                    <button type="button" @click="addService()" class="text-xs font-bold bg-gray-100 dark:bg-gray-700 hover:bg-red-600 hover:text-white text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg transition-all flex items-center">
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                                        Tambah Jasa
+                                    </button>
+                                </div>
+
+                                <template x-for="(service, index) in serviceItems" :key="'service-' + index">
+                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end animate-in fade-in slide-in-from-top-2 duration-300">
+                                        <div class="md:col-span-7">
+                                            <x-input-label x-bind:for="'service_name_' + index" :value="__('Jenis Servis')" class="text-[10px] uppercase text-gray-500 mb-1" />
+                                            <x-text-input x-model="service.name" x-bind:name="'service_items['+index+'][name]'" type="text" class="block w-full rounded-xl" placeholder="Misal: Ganti Oli" required />
+                                        </div>
+                                        <div class="md:col-span-4">
+                                            <x-input-label x-bind:for="'service_price_' + index" :value="__('Biaya Jasa (Rp)')" class="text-[10px] uppercase text-gray-500 mb-1" />
+                                            <x-text-input x-model="service.price" x-bind:name="'service_items['+index+'][price]'" type="number" min="0" class="block w-full rounded-xl" placeholder="0" required />
+                                        </div>
+                                        <div class="md:col-span-1 text-right pb-1">
+                                            <button type="button" @click="removeService(index)" class="p-2 text-gray-400 hover:text-red-600 transition">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div class="text-right text-xs font-bold text-gray-500">Subtotal Jasa: Rp <span x-text="serviceTotal.toLocaleString('id-ID')"></span></div>
                             </div>
 
-                            <template x-for="(service, index) in services" :key="index">
-                                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end animate-in fade-in slide-in-from-top-2 duration-300">
-                                    <div class="md:col-span-7">
-                                        <x-input-label x-bind:for="'service_name_' + index" :value="__('Jenis Servis')" class="text-[10px] uppercase text-gray-500 mb-1" />
-                                        <x-text-input x-model="service.name" x-bind:name="'services['+index+'][name]'" type="text" class="block w-full rounded-xl" placeholder="Misal: Ganti Oli" required />
+                            <div class="space-y-4 pt-6 border-t border-dashed border-gray-100 dark:border-gray-700">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="text-sm font-black uppercase tracking-wider text-gray-400">Biaya Sparepart</h4>
+                                        <p class="text-xs text-gray-400 mt-1">Masukkan sparepart yang dipakai beserta harga per item.</p>
                                     </div>
-                                    <div class="md:col-span-4">
-                                        <x-input-label x-bind:for="'service_price_' + index" :value="__('Biaya (Rp)')" class="text-[10px] uppercase text-gray-500 mb-1" />
-                                        <x-text-input x-model="service.price" x-bind:name="'services['+index+'][price]'" type="number" class="block w-full rounded-xl" placeholder="0" required />
-                                    </div>
-                                    <div class="md:col-span-1 text-right pb-1">
-                                        <button type="button" @click="removeService(index)" class="p-2 text-gray-400 hover:text-red-600 transition">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                        </button>
-                                    </div>
+                                    <button type="button" @click="addSparepart()" class="text-xs font-bold bg-gray-100 dark:bg-gray-700 hover:bg-red-600 hover:text-white text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg transition-all flex items-center">
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                                        Tambah Sparepart
+                                    </button>
                                 </div>
-                            </template>
+
+                                <template x-for="(sparepart, index) in sparepartItems" :key="'sparepart-' + index">
+                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end animate-in fade-in slide-in-from-top-2 duration-300">
+                                        <div class="md:col-span-7">
+                                            <x-input-label x-bind:for="'sparepart_name_' + index" :value="__('Nama Sparepart')" class="text-[10px] uppercase text-gray-500 mb-1" />
+                                            <x-text-input x-model="sparepart.name" x-bind:name="'sparepart_items['+index+'][name]'" type="text" class="block w-full rounded-xl" placeholder="Misal: Oli Shell 4L" />
+                                        </div>
+                                        <div class="md:col-span-4">
+                                            <x-input-label x-bind:for="'sparepart_price_' + index" :value="__('Harga Sparepart (Rp)')" class="text-[10px] uppercase text-gray-500 mb-1" />
+                                            <x-text-input x-model="sparepart.price" x-bind:name="'sparepart_items['+index+'][price]'" type="number" min="0" class="block w-full rounded-xl" placeholder="0" />
+                                        </div>
+                                        <div class="md:col-span-1 text-right pb-1">
+                                            <button type="button" @click="removeSparepart(index)" class="p-2 text-gray-400 hover:text-red-600 transition">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div class="text-right text-xs font-bold text-gray-500">Subtotal Sparepart: Rp <span x-text="sparepartTotal.toLocaleString('id-ID')"></span></div>
+                            </div>
 
                             <div class="flex justify-end pt-4 mt-4 border-t border-dashed border-gray-100 dark:border-gray-700">
                                 <div class="text-right">
-                                    <div class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Estimasi Total Biaya</div>
+                                    <div class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Estimasi Total Tagihan</div>
                                     <div class="text-2xl font-black text-red-600">Rp <span x-text="total.toLocaleString('id-ID')"></span></div>
                                 </div>
                             </div>
@@ -101,11 +154,6 @@
                                 <x-input-label for="next_service_date" :value="__('Jadwal Servis Berikutnya')" />
                                 <x-text-input id="next_service_date" name="next_service_date" type="date" class="mt-1 block w-full rounded-xl" />
                             </div>
-                        </div>
-
-                        <div>
-                            <x-input-label for="spareparts" :value="__('Spareparts (Pisahkan dengan koma)')" />
-                            <x-text-input id="spareparts" name="spareparts" type="text" class="mt-1 block w-full rounded-xl" placeholder="Oli Shell, Kampas Rem, dll" />
                         </div>
 
                         <div>
@@ -172,9 +220,26 @@
                                         <div class="text-[10px] text-gray-400 uppercase tracking-widest">{{ $history->vehicle->brand }} {{ $history->vehicle->model }}</div>
                                     </td>
                                     <td class="px-6 py-4">
+                                        @php
+                                            $serviceDetails = $history->details->where('type', 'jasa');
+                                            $sparepartDetails = $history->details->where('type', 'sparepart');
+                                        @endphp
                                         <div class="font-bold text-gray-900 dark:text-gray-100">{{ $history->service_type }}</div>
-                                        @if($history->spareparts)
-                                            <div class="mt-1 flex flex-wrap gap-1">
+                                        @if($serviceDetails->isNotEmpty())
+                                            <div class="mt-1 space-y-0.5">
+                                                @foreach($serviceDetails as $detail)
+                                                    <div class="text-[11px] text-gray-500">Jasa: {{ $detail->name }} - Rp {{ number_format($detail->price, 0, ',', '.') }}</div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @if($sparepartDetails->isNotEmpty())
+                                            <div class="mt-2 flex flex-wrap gap-1">
+                                                @foreach($sparepartDetails as $part)
+                                                    <span class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-[10px] text-gray-500">{{ $part->name }} - Rp {{ number_format($part->price, 0, ',', '.') }}</span>
+                                                @endforeach
+                                            </div>
+                                        @elseif($history->spareparts)
+                                            <div class="mt-2 flex flex-wrap gap-1">
                                                 @foreach(explode(',', $history->spareparts) as $part)
                                                     <span class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-[10px] text-gray-500">{{ trim($part) }}</span>
                                                 @endforeach
@@ -252,4 +317,3 @@
         </script>
     @endif
 </x-app-layout>
-

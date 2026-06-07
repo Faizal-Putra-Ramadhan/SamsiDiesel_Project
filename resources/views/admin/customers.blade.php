@@ -28,8 +28,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($customers as $customer)
-                                    @foreach($customer->vehicles as $vehicle)
+                                @forelse($customers as $customer)
+                                    @forelse($customer->vehicles as $vehicle)
                                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                             <td class="px-6 py-4">
                                                 <div class="font-bold text-gray-900 dark:text-white">{{ $customer->name }}</div>
@@ -54,8 +54,20 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endforeach
+                                    @empty
+                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <td class="px-6 py-4">
+                                                <div class="font-bold text-gray-900 dark:text-white">{{ $customer->name }}</div>
+                                                <div class="text-xs text-gray-500">{{ $customer->whatsapp_number }}</div>
+                                            </td>
+                                            <td class="px-6 py-4 text-gray-400 italic" colspan="3">Belum ada kendaraan terdaftar.</td>
+                                        </tr>
+                                    @endforelse
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-12 text-center text-gray-500 italic">Belum ada pelanggan tercatat.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

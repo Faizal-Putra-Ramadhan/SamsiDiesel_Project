@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\ServiceHistory;
-use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -66,20 +65,30 @@ class PublicController extends Controller
         $user = null;
         $vehicles = collect();
 
-        if ($request->has('whatsapp_number')) {
+        if ($request->has('whatsapp_number') || $request->has('plate_number')) {
             $request->validate([
                 'whatsapp_number' => 'required|string',
+                'plate_number' => 'required|string',
             ]);
 
-            $user = User::with(['vehicles.serviceHistories.details'])
-                        ->where('whatsapp_number', $request->whatsapp_number)
-                        ->where('role', 'customer')
-                        ->first();
-            
+            $whatsappNumber = $this->normalizeWhatsappNumber($request->whatsapp_number);
+            $plateNumber = $this->normalizePlateNumber($request->plate_number);
+
+            $user = User::where('whatsapp_number', $whatsappNumber)
+                ->where('role', 'customer')
+                ->whereHas('vehicles', fn ($query) => $query->where('plate_number', $plateNumber))
+                ->with(['vehicles' => function ($query) use ($plateNumber) {
+                    $query->where('plate_number', $plateNumber)
+                        ->with(['serviceHistories' => function ($query) {
+                            $query->with('details')->orderByDesc('service_date')->orderByDesc('id');
+                        }]);
+                }])
+                ->first();
+
             if ($user) {
                 $vehicles = $user->vehicles;
             } else {
-                return back()->with('error', 'Nomor WhatsApp tidak ditemukan.');
+                return back()->with('error', 'Data kendaraan tidak ditemukan untuk kombinasi WhatsApp dan plat nomor tersebut.')->withInput();
             }
         }
 
@@ -94,5 +103,25 @@ class PublicController extends Controller
         
         $fileName = 'invoice-autosamsi-' . $history->id . '.pdf';
         return $pdf->download($fileName);
+    }
+
+    private function normalizeWhatsappNumber(string $number): string
+    {
+        $number = preg_replace('/[^0-9]/', '', $number);
+
+        if (str_starts_with($number, '0')) {
+            return '62' . substr($number, 1);
+        }
+
+        if (str_starts_with($number, '8')) {
+            return '62' . $number;
+        }
+
+        return $number;
+    }
+
+    private function normalizePlateNumber(string $plateNumber): string
+    {
+        return strtoupper(trim(preg_replace('/\s+/', ' ', $plateNumber)));
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -15,8 +14,8 @@ Route::get('/services/bubut', [PublicController::class, 'bubutService'])->name('
 Route::get('/services/bodyrepair', [PublicController::class, 'bodyRepairService'])->name('services.bodyrepair');
 Route::get('/gallery', [PublicController::class, 'gallery'])->name('gallery');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
-Route::get('/track', [PublicController::class, 'track'])->name('track');
-Route::get('/track/invoice/{history}', [PublicController::class, 'downloadInvoice'])->name('public.download-invoice');
+Route::get('/track', [PublicController::class, 'track'])->middleware('throttle:20,1')->name('track');
+Route::get('/track/invoice/{history}', [PublicController::class, 'downloadInvoice'])->middleware('signed')->name('public.download-invoice');
 
 // Secret Entry for Employees
 Route::get('/autosamsi-karyawan', function() {
@@ -24,16 +23,6 @@ Route::get('/autosamsi-karyawan', function() {
 })->name('secret-login');
 
 Route::middleware(['auth'])->group(function () {
-    // Customer Routes
-    Route::middleware(['role:customer'])->group(function () {
-        Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
-        Route::get('/my-vehicles', [CustomerController::class, 'vehicles'])->name('customer.vehicles');
-        Route::post('/my-vehicles', [CustomerController::class, 'addVehicle'])->name('customer.add-vehicle');
-        Route::get('/service-history', [CustomerController::class, 'history'])->name('customer.history');
-        Route::get('/complaints', [CustomerController::class, 'complaints'])->name('customer.complaints');
-        Route::post('/complaints', [CustomerController::class, 'storeComplaint'])->name('customer.store-complaint');
-    });
-
     // Admin Routes
     Route::middleware(['role:admin'])->prefix('admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -46,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/services/{history}/invoice', [AdminController::class, 'downloadInvoice'])->name('admin.download-invoice');
         Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
         Route::post('/products', [AdminController::class, 'storeProduct'])->name('admin.store-product');
+        Route::delete('/products/{product}', [AdminController::class, 'destroyProduct'])->name('admin.destroy-product');
         Route::get('/complaints', [AdminController::class, 'complaints'])->name('admin.complaints');
         Route::patch('/complaints/{complaint}', [AdminController::class, 'resolveComplaint'])->name('admin.resolve-complaint');
         Route::post('/whatsapp/reminder', [AdminController::class, 'sendReminder'])->name('admin.send-reminder');
