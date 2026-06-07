@@ -33,7 +33,7 @@ class AdminController extends Controller
     public function services()
     {
         $vehicles = Vehicle::with('user')->get();
-        $histories = ServiceHistory::with('vehicle.user')->latest()->get();
+        $histories = ServiceHistory::with(['vehicle.user', 'details'])->latest()->get();
         return view('admin.services', compact('vehicles', 'histories'));
     }
 
@@ -45,9 +45,12 @@ class AdminController extends Controller
             'plate_number' => 'required|string',
             'vehicle_brand' => 'required|string',
             'vehicle_model' => 'required|string',
-            'services' => 'required|array|min:1',
-            'services.*.name' => 'required|string',
-            'services.*.price' => 'required|numeric',
+            'service_items' => 'required|array|min:1',
+            'service_items.*.name' => 'required|string',
+            'service_items.*.price' => 'required|numeric|min:0',
+            'sparepart_items' => 'nullable|array',
+            'sparepart_items.*.name' => 'nullable|string',
+            'sparepart_items.*.price' => 'nullable|numeric|min:0',
             'service_date' => 'required|date',
             'next_service_date' => 'nullable|date',
             'spareparts' => 'nullable|string',
@@ -76,9 +79,12 @@ class AdminController extends Controller
             ]
         );
 
-        // Calculate total cost and summarize service type
-        $totalCost = collect($request->services)->sum('price');
-        $serviceTypeSummary = collect($request->services)->pluck('name')->implode(', ');
+        $serviceItems = collect($request->service_items);
+        $sparepartItems = collect($request->sparepart_items ?? [])->filter(fn ($item) => filled($item['name'] ?? null));
+
+        $totalCost = $serviceItems->sum('price') + $sparepartItems->sum('price');
+        $serviceTypeSummary = $serviceItems->pluck('name')->implode(', ');
+        $sparepartsSummary = $sparepartItems->pluck('name')->implode(', ');
 
         $history = ServiceHistory::create([
             'vehicle_id' => $vehicle->id,
@@ -86,19 +92,28 @@ class AdminController extends Controller
             'service_date' => $request->service_date,
             'next_service_date' => $request->next_service_date,
             'total_cost' => $totalCost,
-            'spareparts' => $request->spareparts,
+            'spareparts' => $sparepartsSummary ?: $request->spareparts,
             'notes' => $request->notes,
             'technician_name' => $request->technician_name,
             'status' => 'masuk',
             'invoice_status' => 'pending',
         ]);
 
-        // Create detailed service items
-        foreach ($request->services as $item) {
+        foreach ($serviceItems as $item) {
             ServiceDetail::create([
                 'service_history_id' => $history->id,
+                'type' => 'jasa',
                 'name' => $item['name'],
-                'price' => $item['price'],
+                'price' => $item['price'] ?? 0,
+            ]);
+        }
+
+        foreach ($sparepartItems as $item) {
+            ServiceDetail::create([
+                'service_history_id' => $history->id,
+                'type' => 'sparepart',
+                'name' => $item['name'],
+                'price' => $item['price'] ?? 0,
             ]);
         }
 
@@ -273,7 +288,7 @@ class AdminController extends Controller
     public function exportExcel()
     {
         $fileName = 'laporan-servis-' . date('Y-m-d') . '.csv';
-        $histories = ServiceHistory::with('vehicle.user')->latest()->get();
+        $histories = ServiceHistory::with(['vehicle.user', 'details'])->latest()->get();
 
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
@@ -283,19 +298,24 @@ class AdminController extends Controller
             'Expires' => '0',
         ];
 
-        $columns = array('Tanggal', 'Plat Nomor', 'Pemilik', 'Kendaraan', 'Jenis Servis', 'Spareparts', 'Total Biaya', 'Status', 'Pembayaran');
+        $columns = array('Tanggal', 'Plat Nomor', 'Pemilik', 'Kendaraan', 'Jenis Servis', 'Biaya Jasa', 'Spareparts', 'Biaya Sparepart', 'Total Biaya', 'Status', 'Pembayaran');
 
         $callback = function() use($histories, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
 
             foreach ($histories as $history) {
+                $serviceDetails = $history->details->where('type', 'jasa');
+                $sparepartDetails = $history->details->where('type', 'sparepart');
+
                 $row['Tanggal']      = $history->service_date;
                 $row['Plat Nomor']   = $history->vehicle->plate_number;
                 $row['Pemilik']      = $history->vehicle->user->name;
                 $row['Kendaraan']    = $history->vehicle->brand . ' ' . $history->vehicle->model;
                 $row['Jenis Servis'] = $history->service_type;
-                $row['Spareparts']   = $history->spareparts;
+                $row['Biaya Jasa']   = $serviceDetails->sum('price');
+                $row['Spareparts']   = $sparepartDetails->isNotEmpty() ? $sparepartDetails->pluck('name')->implode(', ') : $history->spareparts;
+                $row['Biaya Sparepart'] = $sparepartDetails->sum('price');
                 $row['Total Biaya']  = $history->total_cost;
                 $row['Status']       = strtoupper($history->status);
                 $row['Pembayaran']   = strtoupper($history->invoice_status);
@@ -306,7 +326,9 @@ class AdminController extends Controller
                     $row['Pemilik'],
                     $row['Kendaraan'],
                     $row['Jenis Servis'],
+                    $row['Biaya Jasa'],
                     $row['Spareparts'],
+                    $row['Biaya Sparepart'],
                     $row['Total Biaya'],
                     $row['Status'],
                     $row['Pembayaran']

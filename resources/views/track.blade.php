@@ -106,6 +106,10 @@
                                                     </thead>
                                                     <tbody>
                                                         @forelse($vehicle->serviceHistories as $history)
+                                                            @php
+                                                                $serviceDetails = $history->details->where('type', 'jasa');
+                                                                $sparepartDetails = $history->details->where('type', 'sparepart');
+                                                            @endphp
                                                             <tr>
                                                                 <td class="px-4 py-4">
                                                                     <div class="fw-bold">{{ \Carbon\Carbon::parse($history->service_date)->format('d M Y') }}</div>
@@ -114,11 +118,14 @@
                                                                 <td class="px-4 py-4">
                                                                     <div class="fw-bold text-uppercase">{{ $history->service_type }}</div>
                                                                     <ul class="list-unstyled small text-muted mb-0 mt-2">
-                                                                        @foreach($history->details as $item)
-                                                                            <li><i class="fa fa-check text-primary me-2"></i>{{ $item->name }}</li>
+                                                                        @foreach($serviceDetails as $item)
+                                                                            <li><i class="fa fa-check text-primary me-2"></i>Jasa: {{ $item->name }} - Rp {{ number_format($item->price, 0, ',', '.') }}</li>
+                                                                        @endforeach
+                                                                        @foreach($sparepartDetails as $item)
+                                                                            <li><i class="fa fa-cog text-primary me-2"></i>Sparepart: {{ $item->name }} - Rp {{ number_format($item->price, 0, ',', '.') }}</li>
                                                                         @endforeach
                                                                     </ul>
-                                                                    @if($history->spareparts)
+                                                                    @if($sparepartDetails->isEmpty() && $history->spareparts)
                                                                         <div class="mt-2">
                                                                             <small class="text-muted italic">Spareparts: {{ $history->spareparts }}</small>
                                                                         </div>

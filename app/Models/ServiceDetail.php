@@ -8,6 +8,7 @@ class ServiceDetail extends Model
 {
     protected $fillable = [
         'service_history_id',
+        'type',
         'name',
         'price',
     ];
