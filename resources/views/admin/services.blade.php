@@ -23,6 +23,13 @@
                         </div>
                     @endif
 
+                    @if(Session::has('error'))
+                        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10A8 8 0 112 10a8 8 0 0116 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+                            {{ Session::get('error') }}
+                        </div>
+                    @endif
+
                     <form action="{{ route('admin.add-service') }}" method="POST" class="space-y-6">
                         @csrf
                         
