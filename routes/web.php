@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/services', [AdminController::class, 'services'])->name('admin.services');
         Route::post('/services', [AdminController::class, 'addServiceLog'])->name('admin.add-service');
         Route::patch('/services/{history}', [AdminController::class, 'updateService'])->name('admin.update-service');
+        Route::patch('/services/{history}/details', [AdminController::class, 'updateServiceDetails'])->name('admin.update-service-details');
         Route::post('/services/{history}/notify', [AdminController::class, 'sendSelesaiNotification'])->name('admin.notify-selesai');
         Route::post('/services/{history}/pay', [AdminController::class, 'confirmPayment'])->name('admin.confirm-payment');
         Route::get('/services/{history}/invoice', [AdminController::class, 'downloadInvoice'])->name('admin.download-invoice');

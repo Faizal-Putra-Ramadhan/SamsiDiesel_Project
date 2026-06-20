@@ -7,7 +7,7 @@
 
     <div class="space-y-6">
         <!-- Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Pelanggan -->
             <div class="group bg-white rounded-2xl p-5 ring-1 ring-slate-200/60 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_4px_12px_rgba(15,23,42,0.06)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <div class="flex items-start justify-between">
@@ -15,75 +15,45 @@
                         <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Pelanggan</p>
                         <p class="text-[28px] font-bold text-slate-900 tracking-tight leading-none">{{ $stats['customers'] }}</p>
                     </div>
-                    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-red-50">
-                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-slate-100">
+                        <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </div>
                 </div>
-                <div class="mt-4 h-1 rounded-full bg-red-100">
-                    <div class="h-full rounded-full bg-red-500 w-3/4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"></div>
-                </div>
+                <p class="mt-3 text-[11px] text-slate-400">Total pelanggan terdaftar</p>
             </div>
 
-            <!-- Kendaraan -->
+            <!-- Pendapatan Bulan Ini -->
             <div class="group bg-white rounded-2xl p-5 ring-1 ring-slate-200/60 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_4px_12px_rgba(15,23,42,0.06)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <div class="flex items-start justify-between">
                     <div>
-                        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Kendaraan</p>
-                        <p class="text-[28px] font-bold text-slate-900 tracking-tight leading-none">{{ $stats['vehicles'] }}</p>
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Pendapatan Bulan Ini</p>
+                        <p class="text-[28px] font-bold text-slate-900 tracking-tight leading-none">Rp {{ number_format($stats['monthly_revenue'], 0, ',', '.') }}</p>
                     </div>
                     <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-50">
                         <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
-                <div class="mt-4 h-1 rounded-full bg-blue-100">
-                    <div class="h-full rounded-full bg-blue-500 w-3/4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"></div>
-                </div>
+                <p class="mt-3 text-[11px] text-slate-400">{{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</p>
             </div>
 
-            <!-- Keluhan Pending -->
+            <!-- Servis Bulan Ini -->
             <div class="group bg-white rounded-2xl p-5 ring-1 ring-slate-200/60 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_4px_12px_rgba(15,23,42,0.06)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <div class="flex items-start justify-between">
                     <div>
-                        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Keluhan Pending</p>
-                        <p class="text-[28px] font-bold text-slate-900 tracking-tight leading-none">{{ $stats['pending_complaints'] }}</p>
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Servis Bulan Ini</p>
+                        <p class="text-[28px] font-bold text-slate-900 tracking-tight leading-none">{{ $stats['monthly_services'] }}</p>
                     </div>
-                    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-50">
-                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-green-50">
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                     </div>
                 </div>
-                <div class="mt-4 h-1 rounded-full bg-amber-100">
-                    <div class="h-full rounded-full bg-amber-500 w-1/2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"></div>
-                </div>
-            </div>
-
-            <!-- Export Data -->
-            <div class="group bg-white rounded-2xl p-5 ring-1 ring-slate-200/60 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_4px_12px_rgba(15,23,42,0.06)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Export Data</p>
-                        <a href="{{ route('admin.export-excel') }}" class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-200">
-                            Download Excel
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-50">
-                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-4 h-1 rounded-full bg-emerald-100">
-                    <div class="h-full rounded-full bg-emerald-500 w-3/4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"></div>
-                </div>
+                <p class="mt-3 text-[11px] text-slate-400">Total servis bulan berjalan</p>
             </div>
         </div>
 
