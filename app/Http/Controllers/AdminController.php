@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Complaint;
 use App\Models\NotificationLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -18,14 +19,26 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+        $now = now();
         $stats = [
             'customers' => User::where('role', 'customer')->count(),
-            'vehicles' => Vehicle::count(),
-            'pending_complaints' => Complaint::where('status', 'pending')->count(),
+            'monthly_revenue' => (int) ServiceHistory::whereYear('service_date', $now->year)
+                ->whereMonth('service_date', $now->month)
+                ->sum('total_cost'),
+            'monthly_services' => ServiceHistory::whereYear('service_date', $now->year)
+                ->whereMonth('service_date', $now->month)
+                ->count(),
         ];
 
+        $monthExpr = match (DB::connection()->getDriverName()) {
+            'sqlite' => "strftime('%Y-%m', service_date)",
+            'pgsql'  => "to_char(service_date, 'YYYY-MM')",
+            'sqlsrv' => "FORMAT(service_date, 'yyyy-MM')",
+            default  => "DATE_FORMAT(service_date, '%Y-%m')",
+        };
+
         $monthlyRevenue = ServiceHistory::selectRaw(
-            "DATE_FORMAT(service_date, '%Y-%m') as month, SUM(total_cost) as total"
+            "$monthExpr as month, SUM(total_cost) as total"
         )
             ->whereNotNull('service_date')
             ->groupBy('month')
@@ -34,7 +47,7 @@ class AdminController extends Controller
             ->get();
 
         $monthlyServiceCount = ServiceHistory::selectRaw(
-            "DATE_FORMAT(service_date, '%Y-%m') as month, COUNT(*) as count"
+            "$monthExpr as month, COUNT(*) as count"
         )
             ->whereNotNull('service_date')
             ->groupBy('month')
@@ -60,11 +73,21 @@ class AdminController extends Controller
         return view('admin.customers', compact('customers'));
     }
 
-    public function services()
+    public function services(Request $request)
     {
         $vehicles = Vehicle::with('user')->get();
-        $histories = ServiceHistory::with(['vehicle.user', 'details'])->latest()->get();
-        return view('admin.services', compact('vehicles', 'histories'));
+        $search = trim($request->query('q', ''));
+
+        $histories = ServiceHistory::with(['vehicle.user', 'details'])
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('vehicle', function ($vehicleQuery) use ($search) {
+                    $vehicleQuery->where('plate_number', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->get();
+
+        return view('admin.services', compact('vehicles', 'histories', 'search'));
     }
 
     public function addServiceLog(Request $request)
@@ -300,6 +323,72 @@ class AdminController extends Controller
         }
 
         return back()->with('success', 'Data servis berhasil diperbarui.');
+    }
+
+    public function updateServiceDetails(Request $request, ServiceHistory $history)
+    {
+        $request->validate([
+            'service_items' => 'nullable|array',
+            'service_items.*.name' => 'required|string',
+            'service_items.*.price' => 'required|numeric|min:0',
+            'sparepart_items' => 'nullable|array',
+            'sparepart_items.*.name' => 'nullable|string',
+            'sparepart_items.*.price' => 'nullable|numeric|min:0',
+        ]);
+
+        $oldTotalCost = (float) $history->total_cost;
+
+        $history->details()->delete();
+
+        $serviceItems = collect($request->service_items ?? []);
+        foreach ($serviceItems as $item) {
+            if (filled($item['name'] ?? null)) {
+                ServiceDetail::create([
+                    'service_history_id' => $history->id,
+                    'type' => 'jasa',
+                    'name' => $item['name'],
+                    'price' => $item['price'] ?? 0,
+                ]);
+            }
+        }
+
+        $sparepartItems = collect($request->sparepart_items ?? [])
+            ->filter(fn ($item) => filled($item['name'] ?? null));
+        foreach ($sparepartItems as $item) {
+            ServiceDetail::create([
+                'service_history_id' => $history->id,
+                'type' => 'sparepart',
+                'name' => $item['name'],
+                'price' => $item['price'] ?? 0,
+            ]);
+        }
+
+        $totalCost = (float) ($serviceItems->sum('price') + $sparepartItems->sum('price'));
+        $serviceTypeSummary = $serviceItems->pluck('name')->filter()->implode(', ');
+        $sparepartsSummary = $sparepartItems->pluck('name')->filter()->implode(', ');
+
+        $totalChanged = abs($oldTotalCost - $totalCost) > 0.001;
+
+        $wasLunas = $history->invoice_status === 'lunas';
+        $updateData = [
+            'service_type' => $serviceTypeSummary ?: $history->service_type,
+            'total_cost' => $totalCost,
+            'spareparts' => $sparepartsSummary ?: null,
+        ];
+
+        if ($totalChanged && $wasLunas) {
+            $updateData['invoice_status'] = 'pending';
+            $updateData['paid_at'] = null;
+        }
+
+        $history->update($updateData);
+
+        $message = 'Rincian biaya servis berhasil diperbarui.';
+        if ($totalChanged && $wasLunas) {
+            $message .= ' Status pembayaran dikembalikan ke pending karena total tagihan berubah.';
+        }
+
+        return back()->with('success', $message);
     }
 
     public function sendSelesaiNotification(ServiceHistory $history)
