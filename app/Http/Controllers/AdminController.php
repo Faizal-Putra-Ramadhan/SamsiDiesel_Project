@@ -23,7 +23,35 @@ class AdminController extends Controller
             'vehicles' => Vehicle::count(),
             'pending_complaints' => Complaint::where('status', 'pending')->count(),
         ];
-        return view('admin.dashboard', compact('stats'));
+
+        $monthlyRevenue = ServiceHistory::selectRaw(
+            "DATE_FORMAT(service_date, '%Y-%m') as month, SUM(total_cost) as total"
+        )
+            ->whereNotNull('service_date')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->limit(6)
+            ->get();
+
+        $monthlyServiceCount = ServiceHistory::selectRaw(
+            "DATE_FORMAT(service_date, '%Y-%m') as month, COUNT(*) as count"
+        )
+            ->whereNotNull('service_date')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->limit(6)
+            ->get();
+
+        $serviceStatusCount = ServiceHistory::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'stats',
+            'monthlyRevenue',
+            'monthlyServiceCount',
+            'serviceStatusCount'
+        ));
     }
 
     public function customers()

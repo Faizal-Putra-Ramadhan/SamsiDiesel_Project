@@ -1,18 +1,17 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Manajemen Servis & Riwayat') }}
         </h2>
     </x-slot>
 
-    <div class="py-12" x-data="{ openMenu: null }">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+    <div class="space-y-8" x-data="{ openMenu: null }">
             
             <!-- Log New Service -->
-            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg border border-gray-100 dark:border-gray-700">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-xl font-bold mb-6 flex items-center">
-                        <svg class="w-6 h-6 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div class="bg-slate-800 shadow-sm sm:rounded-lg border border-slate-700">
+                <div class="p-6 text-slate-100">
+                    <h3 class="text-xl font-bold mb-6 flex items-center text-white">
+                        <svg class="w-6 h-6 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         Input Servis Baru
                     </h3>
                     
@@ -55,7 +54,7 @@
                             </div>
                         </div>
 
-                        <div class="space-y-6 pt-4 border-t border-gray-100 dark:border-gray-700" x-data="{ 
+                        <div class="space-y-6 pt-4 border-t border-slate-700" x-data="{ 
                             serviceItems: [{ name: '', price: 0 }],
                             sparepartItems: [{ name: '', price: 0 }],
                             addService() { this.serviceItems.push({ name: '', price: 0 }) },
@@ -70,10 +69,10 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <h4 class="text-sm font-black uppercase tracking-wider text-gray-400">Biaya Jasa</h4>
-                                        <p class="text-xs text-gray-400 mt-1">Masukkan jenis pekerjaan servis dan biaya jasanya.</p>
+                                        <h4 class="text-sm font-black uppercase tracking-wider text-slate-400">Biaya Jasa</h4>
+                                        <p class="text-xs text-slate-400 mt-1">Masukkan jenis pekerjaan servis dan biaya jasanya.</p>
                                     </div>
-                                    <button type="button" @click="addService()" class="text-xs font-bold bg-gray-100 dark:bg-gray-700 hover:bg-red-600 hover:text-white text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg transition-all flex items-center">
+                                    <button type="button" @click="addService()" class="text-xs font-bold bg-slate-700 hover:bg-red-600 hover:text-white text-slate-300 px-3 py-1.5 rounded-lg transition-all flex items-center">
                                         <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                                         Tambah Jasa
                                     </button>
@@ -82,11 +81,11 @@
                                 <template x-for="(service, index) in serviceItems" :key="'service-' + index">
                                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end animate-in fade-in slide-in-from-top-2 duration-300">
                                         <div class="md:col-span-7">
-                                            <x-input-label x-bind:for="'service_name_' + index" :value="__('Jenis Servis')" class="text-[10px] uppercase text-gray-500 mb-1" />
+                                            <x-input-label x-bind:for="'service_name_' + index" :value="__('Jenis Servis')" class="text-[10px] uppercase text-slate-400 mb-1" />
                                             <x-text-input x-model="service.name" x-bind:name="'service_items['+index+'][name]'" type="text" class="block w-full rounded-xl" placeholder="Misal: Ganti Oli" required />
                                         </div>
                                         <div class="md:col-span-4">
-                                            <x-input-label x-bind:for="'service_price_' + index" :value="__('Biaya Jasa (Rp)')" class="text-[10px] uppercase text-gray-500 mb-1" />
+                                            <x-input-label x-bind:for="'service_price_' + index" :value="__('Biaya Jasa (Rp)')" class="text-[10px] uppercase text-slate-400 mb-1" />
                                             <x-text-input x-model="service.price" x-bind:name="'service_items['+index+'][price]'" type="number" min="0" class="block w-full rounded-xl" placeholder="0" required />
                                         </div>
                                         <div class="md:col-span-1 text-right pb-1">
@@ -97,16 +96,16 @@
                                     </div>
                                 </template>
 
-                                <div class="text-right text-xs font-bold text-gray-500">Subtotal Jasa: Rp <span x-text="serviceTotal.toLocaleString('id-ID')"></span></div>
+                                <div class="text-right text-xs font-bold text-slate-400">Subtotal Jasa: Rp <span x-text="serviceTotal.toLocaleString('id-ID')"></span></div>
                             </div>
 
-                            <div class="space-y-4 pt-6 border-t border-dashed border-gray-100 dark:border-gray-700">
+                            <div class="space-y-4 pt-6 border-t border-dashed border-slate-700">
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <h4 class="text-sm font-black uppercase tracking-wider text-gray-400">Biaya Sparepart</h4>
-                                        <p class="text-xs text-gray-400 mt-1">Masukkan sparepart yang dipakai beserta harga per item.</p>
+                                        <h4 class="text-sm font-black uppercase tracking-wider text-slate-400">Biaya Sparepart</h4>
+                                        <p class="text-xs text-slate-400 mt-1">Masukkan sparepart yang dipakai beserta harga per item.</p>
                                     </div>
-                                    <button type="button" @click="addSparepart()" class="text-xs font-bold bg-gray-100 dark:bg-gray-700 hover:bg-red-600 hover:text-white text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg transition-all flex items-center">
+                                    <button type="button" @click="addSparepart()" class="text-xs font-bold bg-slate-700 hover:bg-red-600 hover:text-white text-slate-300 px-3 py-1.5 rounded-lg transition-all flex items-center">
                                         <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                                         Tambah Sparepart
                                     </button>
@@ -115,11 +114,11 @@
                                 <template x-for="(sparepart, index) in sparepartItems" :key="'sparepart-' + index">
                                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end animate-in fade-in slide-in-from-top-2 duration-300">
                                         <div class="md:col-span-7">
-                                            <x-input-label x-bind:for="'sparepart_name_' + index" :value="__('Nama Sparepart')" class="text-[10px] uppercase text-gray-500 mb-1" />
+                                            <x-input-label x-bind:for="'sparepart_name_' + index" :value="__('Nama Sparepart')" class="text-[10px] uppercase text-slate-400 mb-1" />
                                             <x-text-input x-model="sparepart.name" x-bind:name="'sparepart_items['+index+'][name]'" type="text" class="block w-full rounded-xl" placeholder="Misal: Oli Shell 4L" />
                                         </div>
                                         <div class="md:col-span-4">
-                                            <x-input-label x-bind:for="'sparepart_price_' + index" :value="__('Harga Sparepart (Rp)')" class="text-[10px] uppercase text-gray-500 mb-1" />
+                                            <x-input-label x-bind:for="'sparepart_price_' + index" :value="__('Harga Sparepart (Rp)')" class="text-[10px] uppercase text-slate-400 mb-1" />
                                             <x-text-input x-model="sparepart.price" x-bind:name="'sparepart_items['+index+'][price]'" type="number" min="0" class="block w-full rounded-xl" placeholder="0" />
                                         </div>
                                         <div class="md:col-span-1 text-right pb-1">
@@ -130,18 +129,18 @@
                                     </div>
                                 </template>
 
-                                <div class="text-right text-xs font-bold text-gray-500">Subtotal Sparepart: Rp <span x-text="sparepartTotal.toLocaleString('id-ID')"></span></div>
+                                <div class="text-right text-xs font-bold text-slate-400">Subtotal Sparepart: Rp <span x-text="sparepartTotal.toLocaleString('id-ID')"></span></div>
                             </div>
 
-                            <div class="flex justify-end pt-4 mt-4 border-t border-dashed border-gray-100 dark:border-gray-700">
+                            <div class="flex justify-end pt-4 mt-4 border-t border-dashed border-slate-700">
                                 <div class="text-right">
-                                    <div class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Estimasi Total Tagihan</div>
-                                    <div class="text-2xl font-black text-red-600">Rp <span x-text="total.toLocaleString('id-ID')"></span></div>
+                                    <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Estimasi Total Tagihan</div>
+                                    <div class="text-2xl font-black text-red-400">Rp <span x-text="total.toLocaleString('id-ID')"></span></div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-700">
                             <div>
                                 <x-input-label for="service_date" :value="__('Tanggal')" />
                                 <x-text-input id="service_date" name="service_date" type="date" value="{{ date('Y-m-d') }}" class="mt-1 block w-full rounded-xl" required />
@@ -158,7 +157,7 @@
 
                         <div>
                             <x-input-label for="notes" :value="__('Catatan Tambahan')" />
-                            <textarea id="notes" name="notes" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-red-600 focus:ring-red-600 rounded-xl shadow-sm" rows="2"></textarea>
+                            <textarea id="notes" name="notes" class="mt-1 block w-full border-slate-600 bg-slate-900 text-slate-200 placeholder-slate-500 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm" rows="2" placeholder="Opsional..."></textarea>
                         </div>
 
                         <div class="pt-2">
@@ -171,8 +170,8 @@
             </div>
 
             <!-- Recent Histories -->
-            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg overflow-hidden border border-gray-100 dark:border-gray-700">
-                <div class="p-6 text-gray-900 dark:text-gray-100 flex justify-between items-center bg-gray-50/50 dark:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700">
+            <div class="bg-slate-800 shadow-sm sm:rounded-lg overflow-hidden border border-slate-700">
+                <div class="p-6 text-white flex justify-between items-center bg-slate-700/50 border-b border-slate-700">
                     <h3 class="text-xl font-bold">Monitor Progres Servis</h3>
                     <a href="{{ route('admin.export-excel') }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-xl transition shadow-lg shadow-green-500/20">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
@@ -182,7 +181,7 @@
                 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
-                        <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-700/50">
+                        <thead class="text-xs text-slate-400 uppercase bg-slate-700/50">
                             <tr>
                                 <th class="px-6 py-4">Status & Tanggal</th>
                                 <th class="px-6 py-4">Pelanggan/Kendaraan</th>
@@ -191,9 +190,9 @@
                                 <th class="px-6 py-4 text-right">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                        <tbody class="divide-y divide-slate-700">
                             @foreach($histories as $history)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                                <tr class="hover:bg-slate-700/30 transition-colors">
                                     <td class="px-6 py-4">
                                         @php
                                             $statusClasses = match($history->status) {
@@ -212,42 +211,42 @@
                                         <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-widest {{ $statusClasses }} mb-2 inline-block">
                                             {{ $currentStatusName }}
                                         </span>
-                                        <div class="text-xs font-bold text-gray-400">{{ \Carbon\Carbon::parse($history->service_date)->format('d/m/Y') }}</div>
+                                        <div class="text-xs font-bold text-slate-400">{{ \Carbon\Carbon::parse($history->service_date)->format('d/m/Y') }}</div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="font-black text-gray-900 dark:text-white uppercase">{{ $history->vehicle->user->name }}</div>
+                                        <div class="font-black text-white uppercase">{{ $history->vehicle->user->name }}</div>
                                         <div class="text-xs text-red-600 font-bold">{{ $history->vehicle->plate_number }}</div>
-                                        <div class="text-[10px] text-gray-400 uppercase tracking-widest">{{ $history->vehicle->brand }} {{ $history->vehicle->model }}</div>
+                                        <div class="text-[10px] text-slate-400 uppercase tracking-widest">{{ $history->vehicle->brand }} {{ $history->vehicle->model }}</div>
                                     </td>
                                     <td class="px-6 py-4">
                                         @php
                                             $serviceDetails = $history->details->where('type', 'jasa');
                                             $sparepartDetails = $history->details->where('type', 'sparepart');
                                         @endphp
-                                        <div class="font-bold text-gray-900 dark:text-gray-100">{{ $history->service_type }}</div>
+                                        <div class="font-bold text-white">{{ $history->service_type }}</div>
                                         @if($serviceDetails->isNotEmpty())
                                             <div class="mt-1 space-y-0.5">
                                                 @foreach($serviceDetails as $detail)
-                                                    <div class="text-[11px] text-gray-500">Jasa: {{ $detail->name }} - Rp {{ number_format($detail->price, 0, ',', '.') }}</div>
+                                                    <div class="text-[11px] text-slate-400">Jasa: {{ $detail->name }} - Rp {{ number_format($detail->price, 0, ',', '.') }}</div>
                                                 @endforeach
                                             </div>
                                         @endif
                                         @if($sparepartDetails->isNotEmpty())
                                             <div class="mt-2 flex flex-wrap gap-1">
                                                 @foreach($sparepartDetails as $part)
-                                                    <span class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-[10px] text-gray-500">{{ $part->name }} - Rp {{ number_format($part->price, 0, ',', '.') }}</span>
+                                                    <span class="px-1.5 py-0.5 bg-slate-700 rounded text-[10px] text-slate-300">{{ $part->name }} - Rp {{ number_format($part->price, 0, ',', '.') }}</span>
                                                 @endforeach
                                             </div>
                                         @elseif($history->spareparts)
                                             <div class="mt-2 flex flex-wrap gap-1">
                                                 @foreach(explode(',', $history->spareparts) as $part)
-                                                    <span class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-[10px] text-gray-500">{{ trim($part) }}</span>
+                                                    <span class="px-1.5 py-0.5 bg-slate-700 rounded text-[10px] text-slate-300">{{ trim($part) }}</span>
                                                 @endforeach
                                             </div>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="font-black text-gray-900 dark:text-white">Rp {{ number_format($history->total_cost, 0, ',', '.') }}</div>
+                                        <div class="font-black text-white">Rp {{ number_format($history->total_cost, 0, ',', '.') }}</div>
                                         @if($history->invoice_status == 'lunas')
                                             <span class="text-[10px] font-bold text-green-600 uppercase">● LUNAS</span>
                                         @else
@@ -308,7 +307,6 @@
                     </table>
                 </div>
             </div>
-        </div>
     </div>
 
     @if(session('whatsapp_open'))
@@ -316,4 +314,4 @@
             window.open("{{ session('whatsapp_open') }}", "_blank");
         </script>
     @endif
-</x-app-layout>
+</x-admin-layout>
