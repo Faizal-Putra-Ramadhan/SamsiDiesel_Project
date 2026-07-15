@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/services/{history}/invoice', [AdminController::class, 'downloadInvoice'])->name('admin.download-invoice');
         Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
         Route::post('/products', [AdminController::class, 'storeProduct'])->name('admin.store-product');
+        Route::put('/products/{product}', [AdminController::class, 'updateProduct'])->name('admin.update-product');
         Route::delete('/products/{product}', [AdminController::class, 'destroyProduct'])->name('admin.destroy-product');
         Route::get('/complaints', [AdminController::class, 'complaints'])->name('admin.complaints');
         Route::patch('/complaints/{complaint}', [AdminController::class, 'resolveComplaint'])->name('admin.resolve-complaint');
