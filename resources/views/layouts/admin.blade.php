@@ -7,6 +7,8 @@
 
     <title>{{ config('app.name', 'Autosamsi') }} &mdash; Admin</title>
 
+    <link rel="icon" href="{{ asset('template/img/logo.png') }}">
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
 
