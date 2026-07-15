@@ -20,15 +20,6 @@ class AdminController extends Controller
     public function dashboard()
     {
         $now = now();
-        $stats = [
-            'customers' => User::where('role', 'customer')->count(),
-            'monthly_revenue' => (int) ServiceHistory::whereYear('service_date', $now->year)
-                ->whereMonth('service_date', $now->month)
-                ->sum('total_cost'),
-            'monthly_services' => ServiceHistory::whereYear('service_date', $now->year)
-                ->whereMonth('service_date', $now->month)
-                ->count(),
-        ];
 
         $monthExpr = match (DB::connection()->getDriverName()) {
             'sqlite' => "strftime('%Y-%m', service_date)",
@@ -37,7 +28,22 @@ class AdminController extends Controller
             default  => "DATE_FORMAT(service_date, '%Y-%m')",
         };
 
-        $monthlyRevenue = ServiceHistory::selectRaw(
+        $totalCustomers = User::where('role', 'customer')->count();
+        $totalVehicles = Vehicle::count();
+
+        $monthlyRevenue = (int) ServiceHistory::whereYear('service_date', $now->year)
+            ->whereMonth('service_date', $now->month)
+            ->sum('total_cost');
+        $monthlyServices = ServiceHistory::whereYear('service_date', $now->year)
+            ->whereMonth('service_date', $now->month)
+            ->count();
+
+        $yearlyRevenue = (int) ServiceHistory::whereYear('service_date', $now->year)
+            ->sum('total_cost');
+        $avgServiceCost = (int) ServiceHistory::avg('total_cost') ?? 0;
+        $pendingComplaints = Complaint::where('status', 'pending')->count();
+
+        $monthlyRevenueData = ServiceHistory::selectRaw(
             "$monthExpr as month, SUM(total_cost) as total"
         )
             ->whereNotNull('service_date')
@@ -59,11 +65,22 @@ class AdminController extends Controller
             ->groupBy('status')
             ->get();
 
+        $recentHistories = ServiceHistory::with(['vehicle.user'])
+            ->latest('service_date')
+            ->limit(5)
+            ->get();
+
+        $stats = compact(
+            'totalCustomers', 'totalVehicles', 'monthlyRevenue', 'monthlyServices',
+            'yearlyRevenue', 'avgServiceCost', 'pendingComplaints'
+        );
+
         return view('admin.dashboard', compact(
             'stats',
-            'monthlyRevenue',
+            'monthlyRevenueData',
             'monthlyServiceCount',
-            'serviceStatusCount'
+            'serviceStatusCount',
+            'recentHistories'
         ));
     }
 
@@ -222,6 +239,32 @@ class AdminController extends Controller
         ]);
 
         return back()->with('success', 'Produk berhasil ditambahkan.');
+    }
+
+    public function updateProduct(Request $request, Product $product)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'shopee_url' => 'nullable|url',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'shopee_url' => $request->shopee_url,
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($product->image_path && str_starts_with($product->image_path, 'products/')) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+
+            $data['image_path'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($data);
+
+        return back()->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function destroyProduct(Product $product)
