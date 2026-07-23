@@ -416,23 +416,23 @@
             ],
         ];
     @endphp
-    <section class="bg-[#0a0a0a] py-20 sm:py-28">
+    <section class="bg-gray-50 py-20 sm:py-28">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-14 sm:mb-18">
-                <h2 class="text-white text-3xl sm:text-4xl font-bold tracking-tight">Loved by the Community</h2>
-                <p class="text-gray-400 text-base sm:text-lg mt-3 max-w-2xl mx-auto">Harum quae dolore orrupti aut temporibus ariatur.</p>
+                <h2 class="text-gray-900 text-3xl sm:text-4xl font-bold tracking-tight">Loved by the Community</h2>
+                <p class="text-gray-500 text-base sm:text-lg mt-3 max-w-2xl mx-auto">Harum quae dolore orrupti aut temporibus ariatur.</p>
             </div>
             <div class="columns-1 md:columns-2 lg:columns-3 gap-5 space-y-5">
                 @foreach($testimonials as $t)
-                    <div class="bg-[#161616] border border-gray-800 border-opacity-50 rounded-2xl p-6 break-inside-avoid">
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 break-inside-avoid shadow-sm">
                         <div class="flex items-start gap-3">
                             <img src="{{ $t['avatar'] }}" alt="{{ $t['name'] }}" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                             <div>
-                                <h3 class="text-white font-semibold text-base leading-tight">{{ $t['name'] }}</h3>
-                                <p class="text-gray-400 text-sm">{{ $t['role'] }}</p>
+                                <h3 class="text-gray-900 font-semibold text-base leading-tight">{{ $t['name'] }}</h3>
+                                <p class="text-gray-500 text-sm">{{ $t['role'] }}</p>
                             </div>
                         </div>
-                        <p class="text-gray-300 text-sm leading-relaxed mt-4">{{ $t['quote'] }}</p>
+                        <p class="text-gray-600 text-sm leading-relaxed mt-4">{{ $t['quote'] }}</p>
                     </div>
                 @endforeach
             </div>
