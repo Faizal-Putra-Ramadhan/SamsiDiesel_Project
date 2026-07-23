@@ -282,8 +282,81 @@
   color: #ffffff !important;
 }
 
+.testimonial-item {
+  transition: 0.5s;
+}
+
+.testimonial-item:hover .testimonial-text {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(11, 33, 84, 0.10);
+}
+
+.testimonial-quote-icon {
+  position: absolute;
+  top: 0.75rem;
+  left: 1.25rem;
+  font-size: 1.75rem;
+  color: rgba(0, 66, 90, 0.15);
+  line-height: 1;
+  z-index: 1;
+}
+
+.owl-item.center .testimonial-quote-icon {
+  color: rgba(255, 255, 255, 0.20) !important;
+}
+
+.testimonial-rating {
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  min-height: 1.25rem;
+}
+
+.testimonial-rating .fa-star {
+  color: #FFD43B;
+  margin: 0 1px;
+  font-size: 0.85rem;
+}
+
+.testimonial-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--secondary);
+  color: #ffffff;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.04em;
+  transition: 0.5s;
+}
+
+.owl-item.center .testimonial-avatar {
+  background: var(--primary) !important;
+}
+
+.owl-item.center .testimonial-item h5 {
+  color: #ffffff !important;
+}
+
+.testimonial-detail {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6c757d;
+  margin-top: 0.2rem;
+  font-weight: 400;
+}
+
+.owl-item.center .testimonial-detail {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
 .testimonial-carousel .owl-dots {
-  margin-top: 24px;
+  margin-top: 28px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -293,15 +366,16 @@
   position: relative;
   display: inline-block;
   margin: 0 5px;
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   border: 1px solid #cccccc;
   transition: 0.5s;
 }
 
 .testimonial-carousel .owl-dot.active {
-  background: var(--secondary);
-  border-color: var(--se);
+  background: var(--primary);
+  border-color: var(--primary);
 }
 
 /*** Footer ***/
@@ -355,7 +429,7 @@
 .footer .copyright {
   padding: 25px 0;
   font-size: 15px;
-  border-top: 1px solid rgba(256, 256, 256, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer .copyright a {

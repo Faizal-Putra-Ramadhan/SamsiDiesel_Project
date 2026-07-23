@@ -362,56 +362,82 @@
         $testimonials = [
             [
                 'name' => 'Budi Santoso',
-                'profession' => 'Pemilik Toko/Kendaraan Pribadi',
-                'text' => 'Pelayanan sangat memuaskan, teknisi ahli dan sangat membantu. Kendaraan saya kembali prima setelah servis di sini. Harga juga wajar dan transparan.',
+                'role' => 'Pemilik Bengkel',
+                'avatar' => 'https://ui-avatars.com/api/?name=Budi+Santoso&background=0b2154&color=fff&size=80',
+                'quote' => 'Sudah langganan sejak 2015. Untuk urusan diesel, Samsi memang juara. Mesin truk saya yang sebelumnya sering mati mendadak, sekarang kembali bertenaga.',
             ],
             [
                 'name' => 'Siti Rahmawati',
-                'profession' => 'Ibu Rumah Tangga',
-                'text' => 'Bengkel Samsi memang terpercaya. Mobil saya yang sebelumnya sering bermasalah, setelah diservis di sini jadi seperti baru lagi. Terima kasih tim Samsi!',
+                'role' => 'Pengusaha Transportasi',
+                'avatar' => 'https://ui-avatars.com/api/?name=Siti+Rahmawati&background=0b2154&color=fff&size=80',
+                'quote' => 'Armada travel saya semuanya diservis rutin di sini. Teknisinya berpengalaman, harganya masuk akal, dan selalu tepat waktu. Sangat merekomendasikan.',
             ],
             [
                 'name' => 'Ahmad Fauzi',
-                'profession' => 'Supir Angkutan',
-                'text' => 'Udah langganan sejak 2018. Pelayanan ramah, cepat, dan nggak nguras dompet. Khususnya buat sparepart diesel original, lengkap banget.',
+                'role' => 'Sopir Truk',
+                'avatar' => 'https://ui-avatars.com/api/?name=Ahmad+Fauzi&background=0b2154&color=fff&size=80',
+                'quote' => 'Pelayanan cepat dan ramah. Ganti oli, filter, sampai tune up diesel semua lengkap. Nggak perlu khawatir ditipu soalnya semua biaya dijelasin transparan.',
             ],
             [
                 'name' => 'Dwi Prasetyo',
-                'profession' => 'Karyawan Swasta',
-                'text' => 'Rekomendasi buat yang butuh service body repair. Hasil cat ulang mobil saya rapi, warnanya cocok, nggak beda sama aslinya. Puas banget!',
+                'role' => 'Petani',
+                'avatar' => 'https://ui-avatars.com/api/?name=Dwi+Prasetyo&background=0b2154&color=fff&size=80',
+                'quote' => 'Traktor saya bisa kembali berkat Samsi. Sparepart diesel originalnya lengkap, dari pompa injeksi sampai filter solar. Pokoknya puas banget.',
             ],
             [
                 'name' => 'Hendra Gunawan',
-                'profession' => 'Pengusaha Transportasi',
-                'text' => 'Armada truk saya rutin diservis di sini. Tidak pernah mengecewakan, teknisi berpengalaman dan selalu tepat waktu. Sangat profesional.',
+                'role' => 'Mekanik',
+                'avatar' => 'https://ui-avatars.com/api/?name=Hendra+Gunawan&background=0b2154&color=fff&size=80',
+                'quote' => 'Saya sendiri mekanik, tapi kalau ada pekerjaan berat seperti overhaul atau turbo repair, saya percayakan ke Samsi. Hasilnya rapi dan presisi.',
             ],
             [
                 'name' => 'Rina Nuraini',
-                'profession' => 'Guru',
-                'text' => 'Baru pertama kali ke bengkel ini karena rekomendasi teman. Ternyata pelayanannya luar biasa, dijelasin detail soal kerusakan dan biaya. Langganan deh!',
+                'role' => 'Pemilik Usaha Catering',
+                'avatar' => 'https://ui-avatars.com/api/?name=Rina+Nuraini&background=0b2154&color=fff&size=80',
+                'quote' => 'Mobil box catering saya rutin diservis di sini. Dari body repair sampai service mesin diesel, semuanya berkualitas. Terima kasih tim Samsi!',
+            ],
+            [
+                'name' => 'Eko Prasetyo',
+                'role' => 'Pengusaha Tambang',
+                'avatar' => 'https://ui-avatars.com/api/?name=Eko+Prasetyo&background=0b2154&color=fff&size=80',
+                'quote' => 'Alat berat di lokasi tambang saya dirawat semua di sini. Teknisi Samsi berani turun langsung ke lapangan. Pelayanan di luar ekspektasi.',
+            ],
+            [
+                'name' => 'Fitri Handayani',
+                'role' => 'Karyawan Swasta',
+                'avatar' => 'https://ui-avatars.com/api/?name=Fitri+Handayani&background=0b2154&color=fff&size=80',
+                'quote' => 'Mobil pribadi saya yang diesel sering ngambek. Setelah diservis di Samsi, alhamdulillah enteng lagi. Teknisinya ramah dan nggak ribet.',
+            ],
+            [
+                'name' => 'Doni Firmansyah',
+                'role' => 'Supir Travel',
+                'avatar' => 'https://ui-avatars.com/api/?name=Doni+Firmansyah&background=0b2154&color=fff&size=80',
+                'quote' => 'Pelanggan tetap dari tahun 2018. Samsi nggak pernah mengecewakan, sparepart selalu orisinal, pengerjaannya rapi. Recomended banget buat pemilik kendaraan diesel.',
             ],
         ];
     @endphp
-    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="text-center">
-                <h6 class="text-secondary text-uppercase">// Testimonial //</h6>
-                <h1 class="mb-5">Apa Kata Pelanggan Kami?</h1>
+    <section class="bg-gray-50 py-20 sm:py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14 sm:mb-18">
+                <h2 class="text-gray-900 text-3xl sm:text-4xl font-bold tracking-tight">Apa Kata Pelanggan Kami</h2>
+                <p class="text-gray-500 text-base sm:text-lg mt-3 max-w-2xl mx-auto">Kepercayaan pelanggan adalah kebanggaan terbesar kami.</p>
             </div>
-            <div class="owl-carousel testimonial-carousel position-relative">
+            <div class="columns-1 md:columns-2 lg:columns-3 gap-5 space-y-5">
                 @foreach($testimonials as $t)
-                    <div class="testimonial-item text-center">
-                        <img class="bg-light rounded-circle p-2 mx-auto mb-3" src="{{ asset('template/img/grey-bg-1.jpg') }}" style="width: 80px; height: 80px;" alt="{{ $t['name'] }}">
-                        <h5 class="mb-0">{{ $t['name'] }}</h5>
-                        <p>{{ $t['profession'] }}</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">"{{ $t['text'] }}"</p>
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 break-inside-avoid shadow-sm">
+                        <div class="flex items-start gap-3">
+                            <img src="{{ $t['avatar'] }}" alt="{{ $t['name'] }}" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                            <div>
+                                <h3 class="text-gray-900 font-semibold text-base leading-tight">{{ $t['name'] }}</h3>
+                                <p class="text-gray-500 text-sm">{{ $t['role'] }}</p>
+                            </div>
                         </div>
+                        <p class="text-gray-600 text-sm leading-relaxed mt-4">{{ $t['quote'] }}</p>
                     </div>
                 @endforeach
             </div>
         </div>
-    </div>
+    </section>
     <!-- Testimonial End -->
 
     <!-- Spareparts Section (Dynamic) -->
