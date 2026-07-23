@@ -301,7 +301,7 @@
 
 .testimonial-carousel .owl-dot.active {
   background: var(--secondary);
-  border-color: var(--se);
+  border-color: var(--secondary);
 }
 
 /*** Footer ***/
@@ -355,7 +355,7 @@
 .footer .copyright {
   padding: 25px 0;
   font-size: 15px;
-  border-top: 1px solid rgba(256, 256, 256, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer .copyright a {
