@@ -361,66 +361,66 @@
     @php
         $testimonials = [
             [
-                'name' => 'Alex Rivera',
-                'role' => 'Software Engineer',
-                'avatar' => 'https://ui-avatars.com/api/?name=Alex+Rivera&background=0b2154&color=fff&size=80',
-                'quote' => 'This platform completely transformed my workflow. The attention to detail and developer experience is unmatched. I was able to integrate everything within hours instead of days.',
+                'name' => 'Budi Santoso',
+                'role' => 'Pemilik Bengkel',
+                'avatar' => 'https://ui-avatars.com/api/?name=Budi+Santoso&background=0b2154&color=fff&size=80',
+                'quote' => 'Sudah langganan sejak 2015. Untuk urusan diesel, Samsi memang juara. Mesin truk saya yang sebelumnya sering mati mendadak, sekarang kembali bertenaga.',
             ],
             [
-                'name' => 'Sarah Chen',
-                'role' => 'Senior Software Engineer',
-                'avatar' => 'https://ui-avatars.com/api/?name=Sarah+Chen&background=0b2154&color=fff&size=80',
-                'quote' => 'After years of trying different solutions, this is the first time I feel like a tool was built specifically with developers in mind.',
+                'name' => 'Siti Rahmawati',
+                'role' => 'Pengusaha Transportasi',
+                'avatar' => 'https://ui-avatars.com/api/?name=Siti+Rahmawati&background=0b2154&color=fff&size=80',
+                'quote' => 'Armada travel saya semuanya diservis rutin di sini. Teknisinya berpengalaman, harganya masuk akal, dan selalu tepat waktu. Sangat merekomendasikan.',
             ],
             [
-                'name' => 'Marcus Johnson',
-                'role' => 'Fullstack Developer',
-                'avatar' => 'https://ui-avatars.com/api/?name=Marcus+Johnson&background=0b2154&color=fff&size=80',
-                'quote' => 'The documentation is incredibly thorough. I rarely needed to dig beyond the main guides to get things working. Highly recommended for teams of any size.',
+                'name' => 'Ahmad Fauzi',
+                'role' => 'Sopir Truk',
+                'avatar' => 'https://ui-avatars.com/api/?name=Ahmad+Fauzi&background=0b2154&color=fff&size=80',
+                'quote' => 'Pelayanan cepat dan ramah. Ganti oli, filter, sampai tune up diesel semua lengkap. Nggak perlu khawatir ditipu soalnya semua biaya dijelasin transparan.',
             ],
             [
-                'name' => 'Emily Nakamura',
-                'role' => 'Product Designer',
-                'avatar' => 'https://ui-avatars.com/api/?name=Emily+Nakamura&background=0b2154&color=fff&size=80',
-                'quote' => 'The design system is beautiful and incredibly flexible. It gave our product team exactly the foundation we needed to move faster without sacrificing quality.',
+                'name' => 'Dwi Prasetyo',
+                'role' => 'Petani',
+                'avatar' => 'https://ui-avatars.com/api/?name=Dwi+Prasetyo&background=0b2154&color=fff&size=80',
+                'quote' => 'Traktor saya bisa kembali berkat Samsi. Sparepart diesel originalnya lengkap, dari pompa injeksi sampai filter solar. Pokoknya puas banget.',
             ],
             [
-                'name' => 'David Park',
-                'role' => 'Mobile Engineer',
-                'avatar' => 'https://ui-avatars.com/api/?name=David+Park&background=0b2154&color=fff&size=80',
-                'quote' => 'Seamless cross-platform experience. The API is consistent across iOS and Android, which saved us months of double implementation.',
+                'name' => 'Hendra Gunawan',
+                'role' => 'Mekanik',
+                'avatar' => 'https://ui-avatars.com/api/?name=Hendra+Gunawan&background=0b2154&color=fff&size=80',
+                'quote' => 'Saya sendiri mekanik, tapi kalau ada pekerjaan berat seperti overhaul atau turbo repair, saya percayakan ke Samsi. Hasilnya rapi dan presisi.',
             ],
             [
-                'name' => 'Priya Sharma',
-                'role' => 'DevOps Engineer',
-                'avatar' => 'https://ui-avatars.com/api/?name=Priya+Sharma&background=0b2154&color=fff&size=80',
-                'quote' => 'Infrastructure setup took minutes, not hours. The CLI tooling is intuitive and the CI/CD integration worked flawlessly with our existing pipeline.',
+                'name' => 'Rina Nuraini',
+                'role' => 'Pemilik Usaha Catering',
+                'avatar' => 'https://ui-avatars.com/api/?name=Rina+Nuraini&background=0b2154&color=fff&size=80',
+                'quote' => 'Mobil box catering saya rutin diservis di sini. Dari body repair sampai service mesin diesel, semuanya berkualitas. Terima kasih tim Samsi!',
             ],
             [
-                'name' => 'James Wilson',
-                'role' => 'Founder & CEO',
-                'avatar' => 'https://ui-avatars.com/api/?name=James+Wilson&background=0b2154&color=fff&size=80',
-                'quote' => 'We evaluated a dozen platforms before choosing this one. The scalability, support, and total cost of ownership made it an easy decision. Best choice we made all year.',
+                'name' => 'Eko Prasetyo',
+                'role' => 'Pengusaha Tambang',
+                'avatar' => 'https://ui-avatars.com/api/?name=Eko+Prasetyo&background=0b2154&color=fff&size=80',
+                'quote' => 'Alat berat di lokasi tambang saya dirawat semua di sini. Teknisi Samsi berani turun langsung ke lapangan. Pelayanan di luar ekspektasi.',
             ],
             [
-                'name' => 'Maya Patel',
-                'role' => 'Frontend Developer',
-                'avatar' => 'https://ui-avatars.com/api/?name=Maya+Patel&background=0b2154&color=fff&size=80',
-                'quote' => 'Component-based architecture that just makes sense. I was productive from day one. The building blocks are well thought out and compose beautifully.',
+                'name' => 'Fitri Handayani',
+                'role' => 'Karyawan Swasta',
+                'avatar' => 'https://ui-avatars.com/api/?name=Fitri+Handayani&background=0b2154&color=fff&size=80',
+                'quote' => 'Mobil pribadi saya yang diesel sering ngambek. Setelah diservis di Samsi, alhamdulillah enteng lagi. Teknisinya ramah dan nggak ribet.',
             ],
             [
-                'name' => 'Tomás García',
-                'role' => 'Tech Lead',
-                'avatar' => 'https://ui-avatars.com/api/?name=Tomas+Garcia&background=0b2154&color=fff&size=80',
-                'quote' => 'What sets this apart is the community and ecosystem. Plugins, integrations, and extensions are high quality. It is rare to find such a complete package.',
+                'name' => 'Doni Firmansyah',
+                'role' => 'Supir Travel',
+                'avatar' => 'https://ui-avatars.com/api/?name=Doni+Firmansyah&background=0b2154&color=fff&size=80',
+                'quote' => 'Pelanggan tetap dari tahun 2018. Samsi nggak pernah mengecewakan, sparepart selalu orisinal, pengerjaannya rapi. Recomended banget buat pemilik kendaraan diesel.',
             ],
         ];
     @endphp
     <section class="bg-gray-50 py-20 sm:py-28">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-14 sm:mb-18">
-                <h2 class="text-gray-900 text-3xl sm:text-4xl font-bold tracking-tight">Loved by the Community</h2>
-                <p class="text-gray-500 text-base sm:text-lg mt-3 max-w-2xl mx-auto">Harum quae dolore orrupti aut temporibus ariatur.</p>
+                <h2 class="text-gray-900 text-3xl sm:text-4xl font-bold tracking-tight">Apa Kata Pelanggan Kami</h2>
+                <p class="text-gray-500 text-base sm:text-lg mt-3 max-w-2xl mx-auto">Kepercayaan pelanggan adalah kebanggaan terbesar kami.</p>
             </div>
             <div class="columns-1 md:columns-2 lg:columns-3 gap-5 space-y-5">
                 @foreach($testimonials as $t)
