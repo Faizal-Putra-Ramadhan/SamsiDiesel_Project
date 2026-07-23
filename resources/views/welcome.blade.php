@@ -359,90 +359,85 @@
 
     <!-- Testimonial Start -->
     @php
-        $initials = fn($name) => collect(explode(' ', $name))->filter()->take(2)->map(fn($w) => strtoupper(substr($w, 0, 1)))->join('');
         $testimonials = [
             [
-                'name' => 'Budi Santoso',
-                'initials' => $initials('Budi Santoso'),
-                'profession' => 'Pemilik Bengkel',
-                'vehicle' => 'Toyota Avanza',
-                'service' => 'Ganti Oli Mesin',
-                'rating' => 5,
-                'text' => 'Pelayanan sangat memuaskan, teknisi ahli dan sangat membantu. Kendaraan saya kembali prima setelah servis di sini. Harga juga wajar dan transparan.',
+                'name' => 'Alex Rivera',
+                'role' => 'Software Engineer',
+                'avatar' => 'https://ui-avatars.com/api/?name=Alex+Rivera&background=0b2154&color=fff&size=80',
+                'quote' => 'This platform completely transformed my workflow. The attention to detail and developer experience is unmatched. I was able to integrate everything within hours instead of days.',
             ],
             [
-                'name' => 'Siti Rahmawati',
-                'initials' => $initials('Siti Rahmawati'),
-                'profession' => 'Ibu Rumah Tangga',
-                'vehicle' => 'Honda Brio',
-                'service' => 'Service Rutin 10.000 Km',
-                'rating' => 5,
-                'text' => 'Bengkel Samsi memang terpercaya. Mobil saya yang sebelumnya sering bermasalah, setelah diservis di sini jadi seperti baru lagi. Terima kasih tim Samsi!',
+                'name' => 'Sarah Chen',
+                'role' => 'Senior Software Engineer',
+                'avatar' => 'https://ui-avatars.com/api/?name=Sarah+Chen&background=0b2154&color=fff&size=80',
+                'quote' => 'After years of trying different solutions, this is the first time I feel like a tool was built specifically with developers in mind.',
             ],
             [
-                'name' => 'Ahmad Fauzi',
-                'initials' => $initials('Ahmad Fauzi'),
-                'profession' => 'Supir Angkutan',
-                'vehicle' => 'Mitsubishi L300',
-                'service' => 'Tune Up Diesel',
-                'rating' => 5,
-                'text' => 'Udah langganan sejak 2018. Pelayanan ramah, cepat, dan nggak nguras dompet. Khususnya buat sparepart diesel original, lengkap banget.',
+                'name' => 'Marcus Johnson',
+                'role' => 'Fullstack Developer',
+                'avatar' => 'https://ui-avatars.com/api/?name=Marcus+Johnson&background=0b2154&color=fff&size=80',
+                'quote' => 'The documentation is incredibly thorough. I rarely needed to dig beyond the main guides to get things working. Highly recommended for teams of any size.',
             ],
             [
-                'name' => 'Dwi Prasetyo',
-                'initials' => $initials('Dwi Prasetyo'),
-                'profession' => 'Karyawan Swasta',
-                'vehicle' => 'Toyota Kijang Innova',
-                'service' => 'Body Repair & Repaint',
-                'rating' => 5,
-                'text' => 'Rekomendasi buat yang butuh service body repair. Hasil cat ulang mobil saya rapi, warnanya cocok, nggak beda sama aslinya. Puas banget!',
+                'name' => 'Emily Nakamura',
+                'role' => 'Product Designer',
+                'avatar' => 'https://ui-avatars.com/api/?name=Emily+Nakamura&background=0b2154&color=fff&size=80',
+                'quote' => 'The design system is beautiful and incredibly flexible. It gave our product team exactly the foundation we needed to move faster without sacrificing quality.',
             ],
             [
-                'name' => 'Hendra Gunawan',
-                'initials' => $initials('Hendra Gunawan'),
-                'profession' => 'Pengusaha Transportasi',
-                'vehicle' => 'Isuzu Elf',
-                'service' => 'Overhaul Mesin',
-                'rating' => 5,
-                'text' => 'Armada truk saya rutin diservis di sini. Tidak pernah mengecewakan, teknisi berpengalaman dan selalu tepat waktu. Sangat profesional.',
+                'name' => 'David Park',
+                'role' => 'Mobile Engineer',
+                'avatar' => 'https://ui-avatars.com/api/?name=David+Park&background=0b2154&color=fff&size=80',
+                'quote' => 'Seamless cross-platform experience. The API is consistent across iOS and Android, which saved us months of double implementation.',
             ],
             [
-                'name' => 'Rina Nuraini',
-                'initials' => $initials('Rina Nuraini'),
-                'profession' => 'Guru',
-                'vehicle' => 'Daihatsu Sigra',
-                'service' => 'Ganti Kampas Rem',
-                'rating' => 5,
-                'text' => 'Baru pertama kali ke bengkel ini karena rekomendasi teman. Ternyata pelayanannya luar biasa, dijelasin detail soal kerusakan dan biaya. Langganan deh!',
+                'name' => 'Priya Sharma',
+                'role' => 'DevOps Engineer',
+                'avatar' => 'https://ui-avatars.com/api/?name=Priya+Sharma&background=0b2154&color=fff&size=80',
+                'quote' => 'Infrastructure setup took minutes, not hours. The CLI tooling is intuitive and the CI/CD integration worked flawlessly with our existing pipeline.',
+            ],
+            [
+                'name' => 'James Wilson',
+                'role' => 'Founder & CEO',
+                'avatar' => 'https://ui-avatars.com/api/?name=James+Wilson&background=0b2154&color=fff&size=80',
+                'quote' => 'We evaluated a dozen platforms before choosing this one. The scalability, support, and total cost of ownership made it an easy decision. Best choice we made all year.',
+            ],
+            [
+                'name' => 'Maya Patel',
+                'role' => 'Frontend Developer',
+                'avatar' => 'https://ui-avatars.com/api/?name=Maya+Patel&background=0b2154&color=fff&size=80',
+                'quote' => 'Component-based architecture that just makes sense. I was productive from day one. The building blocks are well thought out and compose beautifully.',
+            ],
+            [
+                'name' => 'Tomás García',
+                'role' => 'Tech Lead',
+                'avatar' => 'https://ui-avatars.com/api/?name=Tomas+Garcia&background=0b2154&color=fff&size=80',
+                'quote' => 'What sets this apart is the community and ecosystem. Plugins, integrations, and extensions are high quality. It is rare to find such a complete package.',
             ],
         ];
     @endphp
-    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="text-center">
-                <h6 class="text-secondary text-uppercase">// Testimonial //</h6>
-                <h1 class="mb-5">Apa Kata Pelanggan Kami?</h1>
+    <section class="bg-[#0a0a0a] py-20 sm:py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14 sm:mb-18">
+                <h2 class="text-white text-3xl sm:text-4xl font-bold tracking-tight">Loved by the Community</h2>
+                <p class="text-gray-400 text-base sm:text-lg mt-3 max-w-2xl mx-auto">Harum quae dolore orrupti aut temporibus ariatur.</p>
             </div>
-            <div class="owl-carousel testimonial-carousel position-relative">
+            <div class="columns-1 md:columns-2 lg:columns-3 gap-5 space-y-5">
                 @foreach($testimonials as $t)
-                    <div class="testimonial-item text-center px-3 pb-3">
-                        <div class="testimonial-text bg-light text-center p-4 pt-5 position-relative">
-                            <i class="fas fa-quote-left testimonial-quote-icon"></i>
-                            <p class="mb-0">"{{ $t['text'] }}"</p>
+                    <div class="bg-[#161616] border border-gray-800 border-opacity-50 rounded-2xl p-6 break-inside-avoid">
+                        <div class="flex items-start gap-3">
+                            <img src="{{ $t['avatar'] }}" alt="{{ $t['name'] }}" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                            <div>
+                                <h3 class="text-white font-semibold text-base leading-tight">{{ $t['name'] }}</h3>
+                                <p class="text-gray-400 text-sm">{{ $t['role'] }}</p>
+                            </div>
                         </div>
-                        <div class="testimonial-rating">
-                            @for($r = 0; $r < $t['rating']; $r++)
-                                <i class="fas fa-star"></i>
-                            @endfor
-                        </div>
-                        <div class="testimonial-avatar mx-auto">{{ $t['initials'] }}</div>
-                        <h5 class="mb-0 fw-bold">{{ $t['name'] }}</h5>
-                        <div class="testimonial-detail">{{ $t['vehicle'] }} &middot; {{ $t['service'] }}</div>
+                        <p class="text-gray-300 text-sm leading-relaxed mt-4">{{ $t['quote'] }}</p>
                     </div>
                 @endforeach
             </div>
         </div>
-    </div>
+    </section>
     <!-- Testimonial End -->
 
     <!-- Spareparts Section (Dynamic) -->
