@@ -357,6 +357,63 @@
     </div>
     <!-- Booking End -->
 
+    <!-- Testimonial Start -->
+    @php
+        $testimonials = [
+            [
+                'name' => 'Budi Santoso',
+                'profession' => 'Pemilik Toko/Kendaraan Pribadi',
+                'text' => 'Pelayanan sangat memuaskan, teknisi ahli dan sangat membantu. Kendaraan saya kembali prima setelah servis di sini. Harga juga wajar dan transparan.',
+            ],
+            [
+                'name' => 'Siti Rahmawati',
+                'profession' => 'Ibu Rumah Tangga',
+                'text' => 'Bengkel Samsi memang terpercaya. Mobil saya yang sebelumnya sering bermasalah, setelah diservis di sini jadi seperti baru lagi. Terima kasih tim Samsi!',
+            ],
+            [
+                'name' => 'Ahmad Fauzi',
+                'profession' => 'Supir Angkutan',
+                'text' => 'Udah langganan sejak 2018. Pelayanan ramah, cepat, dan nggak nguras dompet. Khususnya buat sparepart diesel original, lengkap banget.',
+            ],
+            [
+                'name' => 'Dwi Prasetyo',
+                'profession' => 'Karyawan Swasta',
+                'text' => 'Rekomendasi buat yang butuh service body repair. Hasil cat ulang mobil saya rapi, warnanya cocok, nggak beda sama aslinya. Puas banget!',
+            ],
+            [
+                'name' => 'Hendra Gunawan',
+                'profession' => 'Pengusaha Transportasi',
+                'text' => 'Armada truk saya rutin diservis di sini. Tidak pernah mengecewakan, teknisi berpengalaman dan selalu tepat waktu. Sangat profesional.',
+            ],
+            [
+                'name' => 'Rina Nuraini',
+                'profession' => 'Guru',
+                'text' => 'Baru pertama kali ke bengkel ini karena rekomendasi teman. Ternyata pelayanannya luar biasa, dijelasin detail soal kerusakan dan biaya. Langganan deh!',
+            ],
+        ];
+    @endphp
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="text-center">
+                <h6 class="text-secondary text-uppercase">// Testimonial //</h6>
+                <h1 class="mb-5">Apa Kata Pelanggan Kami?</h1>
+            </div>
+            <div class="owl-carousel testimonial-carousel position-relative">
+                @foreach($testimonials as $t)
+                    <div class="testimonial-item text-center">
+                        <img class="bg-light rounded-circle p-2 mx-auto mb-3" src="{{ asset('template/img/grey-bg-1.jpg') }}" style="width: 80px; height: 80px;" alt="{{ $t['name'] }}">
+                        <h5 class="mb-0">{{ $t['name'] }}</h5>
+                        <p>{{ $t['profession'] }}</p>
+                        <div class="testimonial-text bg-light text-center p-4">
+                            <p class="mb-0">"{{ $t['text'] }}"</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    <!-- Testimonial End -->
+
     <!-- Spareparts Section (Dynamic) -->
     <div id="products" class="container-xxl py-5">
         <div class="container">
