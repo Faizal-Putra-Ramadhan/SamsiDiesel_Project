@@ -20,6 +20,26 @@
                 </div>
             @endif
 
+            @php
+                $catalogJasa = config('services_catalog.jasa', []);
+                $catalogSparepart = config('services_catalog.sparepart', []);
+                $catalogJasaJson = json_encode($catalogJasa);
+                $catalogSparepartJson = json_encode($catalogSparepart);
+
+                function prepareItem($item, $catalog) {
+                    $names = array_column($catalog, 'name');
+                    return [
+                        'name' => $item['name'] ?? '',
+                        'price' => (float)($item['price'] ?? 0),
+                        'isCustom' => !empty($item['name']) && !in_array($item['name'], $names),
+                        '_selected' => (!empty($item['name']) && in_array($item['name'], $names)) ? $item['name'] : '',
+                    ];
+                }
+
+                $defaultItem = ['name' => '', 'price' => 0];
+                $serviceInit = array_map(fn($i) => prepareItem($i, $catalogJasa), old('service_items', [$defaultItem]));
+                $sparepartInit = array_map(fn($i) => prepareItem($i, $catalogSparepart), old('sparepart_items', [$defaultItem]));
+            @endphp
             <x-modal name="service-form" :show="$errors->any()" maxWidth="4xl" focusable>
             <div class="bg-slate-800 flex flex-col max-h-[88vh]">
                 <div class="shrink-0 px-6 py-5 border-b border-slate-700 flex items-start justify-between gap-4">
@@ -36,18 +56,35 @@
                 </div>
 
                 <form action="{{ route('admin.add-service') }}" method="POST" class="flex-1 flex flex-col min-h-0"
-                      x-data="{
-                          serviceItems: @js(old('service_items', [['name' => '', 'price' => 0]])),
-                          sparepartItems: @js(old('sparepart_items', [['name' => '', 'price' => 0]])),
-                          addService() { this.serviceItems.push({ name: '', price: 0 }) },
-                          removeService(index) { if(this.serviceItems.length > 1) this.serviceItems.splice(index, 1) },
-                          addSparepart() { this.sparepartItems.push({ name: '', price: 0 }) },
-                          removeSparepart(index) { if(this.sparepartItems.length > 1) this.sparepartItems.splice(index, 1) },
-                          sum(items) { return items.reduce((acc, curr) => acc + (parseFloat(curr.price) || 0), 0) },
-                          get serviceTotal() { return this.sum(this.serviceItems) },
-                          get sparepartTotal() { return this.sum(this.sparepartItems) },
-                          get total() { return this.serviceTotal + this.sparepartTotal }
-                      }">
+                  x-data="{
+                      catalogJasa: @js($catalogJasa),
+                      catalogSparepart: @js($catalogSparepart),
+                      serviceItems: @js($serviceInit),
+                      sparepartItems: @js($sparepartInit),
+                      addService() { this.serviceItems.push({ name: '', price: 0, isCustom: false, _selected: '' }) },
+                      removeService(index) { if(this.serviceItems.length > 1) this.serviceItems.splice(index, 1) },
+                      addSparepart() { this.sparepartItems.push({ name: '', price: 0, isCustom: false, _selected: '' }) },
+                      removeSparepart(index) { if(this.sparepartItems.length > 1) this.sparepartItems.splice(index, 1) },
+                      onCatalogSelect(item, catalog) {
+                          if (item._selected === '__other__') {
+                              item.isCustom = true;
+                              item.name = '';
+                              item.price = 0;
+                              item._selected = '';
+                          } else {
+                              const found = catalog.find(o => o.name === item._selected);
+                              if (found) {
+                                  item.name = found.name;
+                                  item.price = found.price;
+                                  item.isCustom = false;
+                              }
+                          }
+                      },
+                      sum(items) { return items.reduce((acc, curr) => acc + (parseFloat(curr.price) || 0), 0) },
+                      get serviceTotal() { return this.sum(this.serviceItems) },
+                      get sparepartTotal() { return this.sum(this.sparepartItems) },
+                      get total() { return this.serviceTotal + this.sparepartTotal }
+                  }">
                     @csrf
 
                     <div class="flex-1 overflow-y-auto px-6 py-6 space-y-8">
@@ -122,7 +159,27 @@
                                     <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-3 animate-in fade-in slide-in-from-top-2 duration-300">
                                         <div class="md:col-span-7">
                                             <x-input-label class="text-[10px] uppercase text-slate-400" :value="__('Jenis Servis')" />
-                                            <x-text-input x-model="service.name" x-bind:name="'service_items['+index+'][name]'" type="text" class="mt-1 block w-full rounded-xl" placeholder="Misal: Ganti Oli" required />
+                                            <template x-if="!service.isCustom">
+                                                <select x-model="service._selected"
+                                                        @change="onCatalogSelect(service, catalogJasa)"
+                                                        x-bind:name="'service_items['+index+'][name]'"
+                                                        class="mt-1 block w-full rounded-xl border-slate-600 bg-slate-900 text-slate-200 focus:border-green-500 focus:ring-green-500 shadow-sm"
+                                                        required>
+                                                    <option value="">Pilih jasa...</option>
+                                                    <template x-for="opt in catalogJasa" :key="opt.name">
+                                                        <option x-bind:value="opt.name" x-text="opt.name + ' — Rp ' + opt.price.toLocaleString('id-ID')"></option>
+                                                    </template>
+                                                    <option value="__other__">⚙ Lainnya (custom)</option>
+                                                </select>
+                                            </template>
+                                            <template x-if="service.isCustom">
+                                                <x-text-input x-model="service.name"
+                                                             x-bind:name="'service_items['+index+'][name]'"
+                                                             type="text"
+                                                             class="mt-1 block w-full rounded-xl"
+                                                             placeholder="Ketik nama jasa..."
+                                                             required />
+                                            </template>
                                         </div>
                                         <div class="md:col-span-4">
                                             <x-input-label class="text-[10px] uppercase text-slate-400" :value="__('Biaya (Rp)')" />
@@ -155,7 +212,25 @@
                                     <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-3 animate-in fade-in slide-in-from-top-2 duration-300">
                                         <div class="md:col-span-7">
                                             <x-input-label class="text-[10px] uppercase text-slate-400" :value="__('Nama Sparepart')" />
-                                            <x-text-input x-model="sparepart.name" x-bind:name="'sparepart_items['+index+'][name]'" type="text" class="mt-1 block w-full rounded-xl" placeholder="Misal: Oli Shell 4L" />
+                                            <template x-if="!sparepart.isCustom">
+                                                <select x-model="sparepart._selected"
+                                                        @change="onCatalogSelect(sparepart, catalogSparepart)"
+                                                        x-bind:name="'sparepart_items['+index+'][name]'"
+                                                        class="mt-1 block w-full rounded-xl border-slate-600 bg-slate-900 text-slate-200 focus:border-green-500 focus:ring-green-500 shadow-sm">
+                                                    <option value="">Pilih sparepart...</option>
+                                                    <template x-for="opt in catalogSparepart" :key="opt.name">
+                                                        <option x-bind:value="opt.name" x-text="opt.name + ' — Rp ' + opt.price.toLocaleString('id-ID')"></option>
+                                                    </template>
+                                                    <option value="__other__">⚙ Lainnya (custom)</option>
+                                                </select>
+                                            </template>
+                                            <template x-if="sparepart.isCustom">
+                                                <x-text-input x-model="sparepart.name"
+                                                             x-bind:name="'sparepart_items['+index+'][name]'"
+                                                             type="text"
+                                                             class="mt-1 block w-full rounded-xl"
+                                                             placeholder="Ketik nama sparepart..." />
+                                            </template>
                                         </div>
                                         <div class="md:col-span-4">
                                             <x-input-label class="text-[10px] uppercase text-slate-400" :value="__('Harga (Rp)')" />
@@ -410,8 +485,10 @@
 
     @foreach($histories as $history)
         @php
-            $jasaInit = $history->details->where('type', 'jasa')->map(fn($d) => ['name' => $d->name, 'price' => (float) $d->price])->values();
-            $partInit = $history->details->where('type', 'sparepart')->map(fn($d) => ['name' => $d->name, 'price' => (float) $d->price])->values();
+            $editJasaRaw = $history->details->where('type', 'jasa')->map(fn($d) => ['name' => $d->name, 'price' => (float) $d->price])->values()->toArray();
+            $editPartRaw = $history->details->where('type', 'sparepart')->map(fn($d) => ['name' => $d->name, 'price' => (float) $d->price])->values()->toArray();
+            $editJasaInit = array_map(fn($i) => prepareItem($i, $catalogJasa), old('service_items', $editJasaRaw ?: [['name' => '', 'price' => 0]]));
+            $editPartInit = array_map(fn($i) => prepareItem($i, $catalogSparepart), old('sparepart_items', $editPartRaw ?: [['name' => '', 'price' => 0]]));
         @endphp
         <x-modal name="edit-details-{{ $history->id }}" :show="$errors->any() && old('_history_id') == $history->id" maxWidth="3xl" focusable>
         <div class="bg-slate-800 flex flex-col max-h-[88vh]">
@@ -429,18 +506,35 @@
             </div>
 
             <form action="{{ route('admin.update-service-details', $history) }}" method="POST" class="flex-1 flex flex-col min-h-0"
-                  x-data="{
-                      serviceItems: @js(old('service_items', $jasaInit->isEmpty() ? [['name' => '', 'price' => 0]] : $jasaInit->toArray())),
-                      sparepartItems: @js(old('sparepart_items', $partInit->isEmpty() ? [['name' => '', 'price' => 0]] : $partInit->toArray())),
-                      addService() { this.serviceItems.push({ name: '', price: 0 }) },
-                      removeService(index) { if(this.serviceItems.length > 1) this.serviceItems.splice(index, 1) },
-                      addSparepart() { this.sparepartItems.push({ name: '', price: 0 }) },
-                      removeSparepart(index) { if(this.sparepartItems.length > 1) this.sparepartItems.splice(index, 1) },
-                      sum(items) { return items.reduce((acc, curr) => acc + (parseFloat(curr.price) || 0), 0) },
-                      get serviceTotal() { return this.sum(this.serviceItems) },
-                      get sparepartTotal() { return this.sum(this.sparepartItems) },
-                      get total() { return this.serviceTotal + this.sparepartTotal }
-                  }">
+              x-data="{
+                  catalogJasa: @js($catalogJasa),
+                  catalogSparepart: @js($catalogSparepart),
+                  serviceItems: @js($editJasaInit),
+                  sparepartItems: @js($editPartInit),
+                  addService() { this.serviceItems.push({ name: '', price: 0, isCustom: false, _selected: '' }) },
+                  removeService(index) { if(this.serviceItems.length > 1) this.serviceItems.splice(index, 1) },
+                  addSparepart() { this.sparepartItems.push({ name: '', price: 0, isCustom: false, _selected: '' }) },
+                  removeSparepart(index) { if(this.sparepartItems.length > 1) this.sparepartItems.splice(index, 1) },
+                  onCatalogSelect(item, catalog) {
+                      if (item._selected === '__other__') {
+                          item.isCustom = true;
+                          item.name = '';
+                          item.price = 0;
+                          item._selected = '';
+                      } else {
+                          const found = catalog.find(o => o.name === item._selected);
+                          if (found) {
+                              item.name = found.name;
+                              item.price = found.price;
+                              item.isCustom = false;
+                          }
+                      }
+                  },
+                  sum(items) { return items.reduce((acc, curr) => acc + (parseFloat(curr.price) || 0), 0) },
+                  get serviceTotal() { return this.sum(this.serviceItems) },
+                  get sparepartTotal() { return this.sum(this.sparepartItems) },
+                  get total() { return this.serviceTotal + this.sparepartTotal }
+              }">
                 @csrf @method('PATCH')
                 <input type="hidden" name="_history_id" value="{{ $history->id }}">
 
@@ -487,7 +581,27 @@
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-3 animate-in fade-in slide-in-from-top-2 duration-300">
                                     <div class="md:col-span-7">
                                         <x-input-label class="text-[10px] uppercase text-slate-400" :value="__('Jenis Servis')" />
-                                        <x-text-input x-model="service.name" x-bind:name="'service_items['+index+'][name]'" type="text" class="mt-1 block w-full rounded-xl" placeholder="Misal: Ganti Oli" required />
+                                        <template x-if="!service.isCustom">
+                                            <select x-model="service._selected"
+                                                    @change="onCatalogSelect(service, catalogJasa)"
+                                                    x-bind:name="'service_items['+index+'][name]'"
+                                                    class="mt-1 block w-full rounded-xl border-slate-600 bg-slate-900 text-slate-200 focus:border-green-500 focus:ring-green-500 shadow-sm"
+                                                    required>
+                                                <option value="">Pilih jasa...</option>
+                                                <template x-for="opt in catalogJasa" :key="opt.name">
+                                                    <option x-bind:value="opt.name" x-text="opt.name + ' — Rp ' + opt.price.toLocaleString('id-ID')"></option>
+                                                </template>
+                                                <option value="__other__">⚙ Lainnya (custom)</option>
+                                            </select>
+                                        </template>
+                                        <template x-if="service.isCustom">
+                                            <x-text-input x-model="service.name"
+                                                         x-bind:name="'service_items['+index+'][name]'"
+                                                         type="text"
+                                                         class="mt-1 block w-full rounded-xl"
+                                                         placeholder="Ketik nama jasa..."
+                                                         required />
+                                        </template>
                                     </div>
                                     <div class="md:col-span-4">
                                         <x-input-label class="text-[10px] uppercase text-slate-400" :value="__('Biaya (Rp)')" />
@@ -520,7 +634,25 @@
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-3 animate-in fade-in slide-in-from-top-2 duration-300">
                                     <div class="md:col-span-7">
                                         <x-input-label class="text-[10px] uppercase text-slate-400" :value="__('Nama Sparepart')" />
-                                        <x-text-input x-model="sparepart.name" x-bind:name="'sparepart_items['+index+'][name]'" type="text" class="mt-1 block w-full rounded-xl" placeholder="Misal: Oli Shell 4L" />
+                                        <template x-if="!sparepart.isCustom">
+                                            <select x-model="sparepart._selected"
+                                                    @change="onCatalogSelect(sparepart, catalogSparepart)"
+                                                    x-bind:name="'sparepart_items['+index+'][name]'"
+                                                    class="mt-1 block w-full rounded-xl border-slate-600 bg-slate-900 text-slate-200 focus:border-green-500 focus:ring-green-500 shadow-sm">
+                                                <option value="">Pilih sparepart...</option>
+                                                <template x-for="opt in catalogSparepart" :key="opt.name">
+                                                    <option x-bind:value="opt.name" x-text="opt.name + ' — Rp ' + opt.price.toLocaleString('id-ID')"></option>
+                                                </template>
+                                                <option value="__other__">⚙ Lainnya (custom)</option>
+                                            </select>
+                                        </template>
+                                        <template x-if="sparepart.isCustom">
+                                            <x-text-input x-model="sparepart.name"
+                                                         x-bind:name="'sparepart_items['+index+'][name]'"
+                                                         type="text"
+                                                         class="mt-1 block w-full rounded-xl"
+                                                         placeholder="Ketik nama sparepart..." />
+                                        </template>
                                     </div>
                                     <div class="md:col-span-4">
                                         <x-input-label class="text-[10px] uppercase text-slate-400" :value="__('Harga (Rp)')" />
