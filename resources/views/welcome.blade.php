@@ -359,35 +359,60 @@
 
     <!-- Testimonial Start -->
     @php
+        $initials = fn($name) => collect(explode(' ', $name))->filter()->take(2)->map(fn($w) => strtoupper(substr($w, 0, 1)))->join('');
         $testimonials = [
             [
                 'name' => 'Budi Santoso',
-                'profession' => 'Pemilik Toko/Kendaraan Pribadi',
+                'initials' => $initials('Budi Santoso'),
+                'profession' => 'Pemilik Bengkel',
+                'vehicle' => 'Toyota Avanza',
+                'service' => 'Ganti Oli Mesin',
+                'rating' => 5,
                 'text' => 'Pelayanan sangat memuaskan, teknisi ahli dan sangat membantu. Kendaraan saya kembali prima setelah servis di sini. Harga juga wajar dan transparan.',
             ],
             [
                 'name' => 'Siti Rahmawati',
+                'initials' => $initials('Siti Rahmawati'),
                 'profession' => 'Ibu Rumah Tangga',
+                'vehicle' => 'Honda Brio',
+                'service' => 'Service Rutin 10.000 Km',
+                'rating' => 5,
                 'text' => 'Bengkel Samsi memang terpercaya. Mobil saya yang sebelumnya sering bermasalah, setelah diservis di sini jadi seperti baru lagi. Terima kasih tim Samsi!',
             ],
             [
                 'name' => 'Ahmad Fauzi',
+                'initials' => $initials('Ahmad Fauzi'),
                 'profession' => 'Supir Angkutan',
+                'vehicle' => 'Mitsubishi L300',
+                'service' => 'Tune Up Diesel',
+                'rating' => 5,
                 'text' => 'Udah langganan sejak 2018. Pelayanan ramah, cepat, dan nggak nguras dompet. Khususnya buat sparepart diesel original, lengkap banget.',
             ],
             [
                 'name' => 'Dwi Prasetyo',
+                'initials' => $initials('Dwi Prasetyo'),
                 'profession' => 'Karyawan Swasta',
+                'vehicle' => 'Toyota Kijang Innova',
+                'service' => 'Body Repair & Repaint',
+                'rating' => 5,
                 'text' => 'Rekomendasi buat yang butuh service body repair. Hasil cat ulang mobil saya rapi, warnanya cocok, nggak beda sama aslinya. Puas banget!',
             ],
             [
                 'name' => 'Hendra Gunawan',
+                'initials' => $initials('Hendra Gunawan'),
                 'profession' => 'Pengusaha Transportasi',
+                'vehicle' => 'Isuzu Elf',
+                'service' => 'Overhaul Mesin',
+                'rating' => 5,
                 'text' => 'Armada truk saya rutin diservis di sini. Tidak pernah mengecewakan, teknisi berpengalaman dan selalu tepat waktu. Sangat profesional.',
             ],
             [
                 'name' => 'Rina Nuraini',
+                'initials' => $initials('Rina Nuraini'),
                 'profession' => 'Guru',
+                'vehicle' => 'Daihatsu Sigra',
+                'service' => 'Ganti Kampas Rem',
+                'rating' => 5,
                 'text' => 'Baru pertama kali ke bengkel ini karena rekomendasi teman. Ternyata pelayanannya luar biasa, dijelasin detail soal kerusakan dan biaya. Langganan deh!',
             ],
         ];
@@ -400,13 +425,19 @@
             </div>
             <div class="owl-carousel testimonial-carousel position-relative">
                 @foreach($testimonials as $t)
-                    <div class="testimonial-item text-center">
-                        <img class="bg-light rounded-circle p-2 mx-auto mb-3" src="{{ asset('template/img/grey-bg-1.jpg') }}" style="width: 80px; height: 80px;" alt="{{ $t['name'] }}">
-                        <h5 class="mb-0">{{ $t['name'] }}</h5>
-                        <p>{{ $t['profession'] }}</p>
-                        <div class="testimonial-text bg-light text-center p-4">
+                    <div class="testimonial-item text-center px-3 pb-3">
+                        <div class="testimonial-text bg-light text-center p-4 pt-5 position-relative">
+                            <i class="fas fa-quote-left testimonial-quote-icon"></i>
                             <p class="mb-0">"{{ $t['text'] }}"</p>
                         </div>
+                        <div class="testimonial-rating">
+                            @for($r = 0; $r < $t['rating']; $r++)
+                                <i class="fas fa-star"></i>
+                            @endfor
+                        </div>
+                        <div class="testimonial-avatar mx-auto">{{ $t['initials'] }}</div>
+                        <h5 class="mb-0 fw-bold">{{ $t['name'] }}</h5>
+                        <div class="testimonial-detail">{{ $t['vehicle'] }} &middot; {{ $t['service'] }}</div>
                     </div>
                 @endforeach
             </div>
