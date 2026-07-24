@@ -18,5 +18,13 @@ export default {
         },
     },
 
+    corePlugins: {
+        // Bootstrap (frontend template) defines `.collapse` as `display:none`.
+        // Tailwind's `visibility` core plugin emits `.collapse { visibility:collapse }`
+        // which conflicts and makes the Bootstrap navbar-collapse invisible.
+        // These utilities are not used anywhere in this project, so disable them.
+        visibility: false,
+    },
+
     plugins: [forms],
 };

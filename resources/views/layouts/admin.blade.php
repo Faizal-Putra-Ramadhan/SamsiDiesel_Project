@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/admin.css', 'resources/js/app.js'])
 </head>
 <body class="dark font-sans antialiased h-full bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100" x-data="{ sidebarOpen: false }">
 
